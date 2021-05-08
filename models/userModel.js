@@ -41,5 +41,16 @@ userSchema.statics.authenticate = function (username, password, callback) { //pr
 		});
 }
 
+userSchema.pre('update', function (next) { //sifrira geslo pred posodabljanjem v bazi
+	var user = this;
+	bcrypt.hash(user.password, 10, function (err, hash) {
+		if (err) {
+			return next(err);
+		}
+		user.password = hash;
+		next();
+	});
+});
+
 module.exports = mongoose.model('user', userSchema);
 var User = mongoose.model('user', userSchema, 'users');

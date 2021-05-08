@@ -48,6 +48,8 @@ module.exports = {
         });
     },
     userEdit: function (req, res) {
+        data = []
+        var id = req.params.id;
         UserModel.findOne({_id: id}, function (err, user) {
             if (err) {
                 return res.status(500).json({
@@ -61,7 +63,7 @@ module.exports = {
                     message: 'No such user'
                 });
             }
-            data.users = user;
+            data.user = user;
             return res.render('administration/userEdit', data);
         });
     },
@@ -89,6 +91,26 @@ module.exports = {
             return res.redirect("/")
         });
     },
+    createAdmin: function (req, res) {
+        var user = new UserModel({
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email,
+            isAdmin: Boolean(req.body.isAdmin)
+        });
+
+
+        user.save(function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when creating user',
+                    error: err
+                });
+            }
+
+            return res.redirect(req.get('referer'));
+        });
+    },
 
     /**
      * userController.update()
@@ -113,7 +135,7 @@ module.exports = {
             user.username = req.body.username ? req.body.username : user.username;
             user.password = req.body.password ? req.body.password : user.password;
             user.email = req.body.email ? req.body.email : user.email;
-            user.isAdmin = req.body.isAdmin ? req.body.isAdmin : user.isAdmin;
+            user.isAdmin = Boolean(req.body.isAdmin);
 
             user.save(function (err, user) {
                 if (err) {
@@ -123,7 +145,7 @@ module.exports = {
                     });
                 }
 
-                return res.json(user);
+                return res.redirect('/users/administration');
             });
         });
     },
@@ -142,7 +164,7 @@ module.exports = {
                 });
             }
 
-            return res.status(204).json();
+            return res.redirect(req.get('referer'));
         });
     }, showRegister: function (req, res) { //pokaže stran za registracijo
         return res.render('user/register');

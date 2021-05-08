@@ -32,13 +32,14 @@ router.post('/delete/:id', checkIfAdmin, userController.remove);
  * POST
  */
 router.post('/', userController.create);
+router.post('/administration/create', userController.createAdmin);
 router.post('/login', userController.login);
+router.post('/administration/edit/:id', checkIfAdmin, userController.update);
 
 /*
  * PUT
  */
 router.put('/:id', userController.update);
-router.get('/administration/edit/:id', checkIfAdmin, userController.update);
 /*
  * DELETE
  */
