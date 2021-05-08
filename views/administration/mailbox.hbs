@@ -1,0 +1,31 @@
+<h1>Dodaj nabiralnik</h1>
+<form action="/mailbox" method="post">
+    <label for="owner">Izberi lastnika: </label>
+    <select name="owner" id="owner">
+        {{#each users}}
+            <option value="{{_id}}">{{username}}</option>
+        {{/each}}
+    </select>
+    <br>
+    <br>
+    <label for="location">Lokacija paketnika</label>
+    <input type="text" name="location" placeholder="Lokacija" required="">
+    <br>
+    <br>
+    <input class="btn btn-primary btn-md " type="submit" value="Dodaj">
+</form>
+<br>
+<br>
+<hr>
+<h2>Nabiralniki:</h2>
+<hr>
+{{#each mailboxes}}
+    <a href="#" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
+    <form action="/mailbox/delete/{{_id}}" method="post">
+        <input class="btn btn-primary btn-md " type="submit" value="Izbriši">
+    </form>
+    <p>Lastnik: {{owner_id.username}}<br>
+        Lokacija: {{location}} <br>
+        Zaklenjen: {{#if locked}}DA {{else}} NE{{/if}}</p>
+    <hr>
+{{/each}}
