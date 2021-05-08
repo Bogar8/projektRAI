@@ -55,6 +55,7 @@ module.exports = {
             username: req.body.username,
             password: req.body.password,
             email: req.body.email,
+            isAdmin: false
         });
 
 
@@ -93,6 +94,7 @@ module.exports = {
             user.username = req.body.username ? req.body.username : user.username;
             user.password = req.body.password ? req.body.password : user.password;
             user.email = req.body.email ? req.body.email : user.email;
+            user.isAdmin = req.body.isAdmin ? req.body.isAdmin : user.isAdmin;
 
             user.save(function (err, user) {
                 if (err) {
@@ -138,6 +140,7 @@ module.exports = {
                 req.session.userId = user._id;
                 req.session.username = user.username;
                 req.session.login = true;
+                req.session.isAdmin = user.isAdmin;
                 return res.redirect('/');
             }
         });

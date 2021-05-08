@@ -6,7 +6,8 @@ var bcrypt = require('bcrypt');
 var userSchema = new Schema({
 	'username' : String,
 	'password' : String,
-	'email' : String
+	'email' : String,
+	'isAdmin' : Boolean
 });
 
 userSchema.pre('save', function (next) { //sifrira geslo pred vnosom v bazo

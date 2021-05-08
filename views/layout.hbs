@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>{{title}}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    {{{body}}}
-  </body>
+</head>
+<ul>
+    {{#if session.login}}
+        <li><a href="/">Domov</a></li>
+        <li><a href="/users/paketniki">Moji paketniki</a></li>
+        <li><a href="/users/profile">Profil</a></li>
+        <li><a href="/users/logout">Odjava</a></li>
+        {{#if session.isAdmin}}
+            <li><a href="/users/admin">Administracija</a></li>
+        {{/if}}
+    {{else}}
+        <li><a href="/">Domov</a></li>
+        <li><a href="/users/login">Prijava</a></li>
+        <li><a href="/users/register">Registracija</a></li>
+    {{/if}}
+
+</ul>
+<body>
+{{{body}}}
+</body>
 </html>

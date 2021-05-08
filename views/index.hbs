@@ -2,10 +2,5 @@
 <p>Welcome to {{title}}</p>
 
 {{#if session.login}}
-    <li><a href="/">Domov</a></li>
-    <li><a href="/users/logout">Odjava</a></li>
-    <p>Pozdravlje {{session.username}}</p>
-{{else}}
-    <li><a href="/users/login">Prijava</a></li>
-    <li><a href="/users/register">Registracija</a></li>
+    <p>Pozdravljen {{session.username}}</p>
 {{/if}}
