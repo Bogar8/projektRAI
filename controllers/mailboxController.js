@@ -1,5 +1,6 @@
 var MailboxModel = require('../models/mailboxModel.js');
 
+
 /**
  * mailboxController.js
  *
@@ -52,9 +53,9 @@ module.exports = {
      */
     create: function (req, res) {
         var mailbox = new MailboxModel({
-			owner_id : req.body.owner_id,
-			location : req.body.location,
-			locked : req.body.locked
+            owner_id: req.body.owner,
+            location: req.body.location,
+            locked: true,
         });
 
         mailbox.save(function (err, mailbox) {
@@ -90,9 +91,9 @@ module.exports = {
             }
 
             mailbox.owner_id = req.body.owner_id ? req.body.owner_id : mailbox.owner_id;
-			mailbox.location = req.body.location ? req.body.location : mailbox.location;
-			mailbox.locked = req.body.locked ? req.body.locked : mailbox.locked;
-			
+            mailbox.location = req.body.location ? req.body.location : mailbox.location;
+            mailbox.locked = req.body.locked ? req.body.locked : mailbox.locked;
+
             mailbox.save(function (err, mailbox) {
                 if (err) {
                     return res.status(500).json({
@@ -120,7 +121,25 @@ module.exports = {
                 });
             }
 
-            return res.status(204).json();
+            return res.redirect(req.get('referer'));
+        });
+    },
+    loadMaliboxAdministration: function (req, res) { //nalozi administracijsko stran z vsemi uporabniki in nabiralniki
+        var data = [];
+        data.users = req.users;
+
+        MailboxModel.find().populate('owner_id').exec(function (err, mailboxs) {
+            {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting mailbox.',
+                        error: err
+                    });
+                }
+                data.mailboxes = mailboxs;
+                console.log(mailboxs);
+                return res.render('administration/mailbox', data);
+            }
         });
     }
-};
+}
