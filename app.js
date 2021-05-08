@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var config = require('./config.json');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/userRoutes');
@@ -11,9 +12,7 @@ var mailboxRouter=require('./routes/mailboxRoutes');
 var app = express();
 
 var mongoose = require('mongoose');
-
-//var mongoDB = "mongodb+srv://bogar:geslo@cluster0.iberm.mongodb.net/projektRAI?retryWrites=true&w=majority";
-var mongoDB = 'mongodb+srv://zan:zan123@feri.qvtf8.mongodb.net/vaja3?retryWrites=true&w=majority';
+var mongoDB = config.dbString;
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
