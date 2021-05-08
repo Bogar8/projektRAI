@@ -5,8 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+var usersRouter = require('./routes/userRoutes');
 var app = express();
 
 var mongoose = require('mongoose');
@@ -16,6 +15,24 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
+
+//shranjevanje seje
+var session = require('express-session');
+var MongoStore = require('connect-mongo');
+app.use(session({
+  secret: 'work hard',
+  resave: true,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: mongoDB })
+}));
+
+
+//na vsaki strani dostop do session spremenljivk ter nastavitev titla
+app.use(function(req, res, next){
+  res.locals.session = req.session;
+  res.locals.title="Pametni paketnik"
+  next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

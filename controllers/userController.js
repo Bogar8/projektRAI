@@ -52,11 +52,11 @@ module.exports = {
      */
     create: function (req, res) {
         var user = new UserModel({
-			username : req.body.username,
-			password : req.body.password,
-			email : req.body.email,
-			id : req.body.id
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email,
         });
+
 
         user.save(function (err, user) {
             if (err) {
@@ -66,7 +66,7 @@ module.exports = {
                 });
             }
 
-            return res.status(201).json(user);
+            return res.redirect("/")
         });
     },
 
@@ -91,10 +91,9 @@ module.exports = {
             }
 
             user.username = req.body.username ? req.body.username : user.username;
-			user.password = req.body.password ? req.body.password : user.password;
-			user.email = req.body.email ? req.body.email : user.email;
-			user.id = req.body.id ? req.body.id : user.id;
-			
+            user.password = req.body.password ? req.body.password : user.password;
+            user.email = req.body.email ? req.body.email : user.email;
+
             user.save(function (err, user) {
                 if (err) {
                     return res.status(500).json({
@@ -124,5 +123,33 @@ module.exports = {
 
             return res.status(204).json();
         });
+    }, showRegister: function (req, res) { //pokaže stran za registracijo
+        return res.render('user/register');
+    }, showLogin: function (req, res) { //pokaze stran za prijavo
+        return res.render('user/login');
+    }, login: function (req, res, next) { //prijava
+        UserModel.authenticate(req.body.username, req.body.password, function (error, user) {
+            if (error || !user) {
+                var err = new Error("Wrong username or password");
+                err.status = 401;
+                return next(err);
+            } else {
+                console.log(user);
+                req.session.userId = user._id;
+                req.session.username = user.username;
+                req.session.login = true;
+                return res.redirect('/');
+            }
+        });
+    },logout: function (req, res, next) { //odjava uporabnika
+        if (req.session) {
+            req.session.destroy(function (err) {
+                if (err) {
+                    return next(err)
+                } else {
+                    return res.redirect('/');
+                }
+            });
+        }
     }
 };

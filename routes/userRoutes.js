@@ -6,7 +6,9 @@ var userController = require('../controllers/userController.js');
  * GET
  */
 router.get('/', userController.list);
-
+router.get('/register', userController.showRegister);
+router.get('/login', userController.showLogin);
+router.get('/logout',userController.logout);
 /*
  * GET
  */
@@ -16,6 +18,7 @@ router.get('/:id', userController.show);
  * POST
  */
 router.post('/', userController.create);
+router.post('/login', userController.login);
 
 /*
  * PUT
