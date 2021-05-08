@@ -16,10 +16,10 @@ function getAllUsers(req, res, next) { //pridobi vse uporabnike za combobox za i
     });
 }
 
-function checkIfAdmin(req,res,next){ //preveri ali imamo pravice
-    if(req.session.isAdmin===true)
+function checkIfAdmin(req, res, next) { //preveri ali imamo pravice
+    if (req.session.isAdmin === true)
         next();
-    else{
+    else {
         return res.status(500).json({
             message: 'You dont have accsecc!'
         });
@@ -30,8 +30,8 @@ function checkIfAdmin(req,res,next){ //preveri ali imamo pravice
  * GET
  */
 router.get('/', mailboxController.list);
-router.get('/administration',checkIfAdmin, getAllUsers, mailboxController.loadMaliboxAdministration);
-
+router.get('/administration', checkIfAdmin, getAllUsers, mailboxController.loadMaliboxAdministration);
+router.get('/administration/edit/:id', checkIfAdmin, getAllUsers, mailboxController.mailboxEdit);
 /*
  * GET
  */
@@ -41,7 +41,9 @@ router.get('/:id', mailboxController.show);
  * POST
  */
 router.post('/', mailboxController.create);
-router.post('/delete/:id', mailboxController.remove);
+router.post('/delete/:id', checkIfAdmin, mailboxController.remove);
+router.post('/administration/edit/:id', checkIfAdmin, mailboxController.update);
+
 
 /*
  * PUT

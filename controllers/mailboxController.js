@@ -104,7 +104,7 @@ module.exports = {
                     });
                 }
 
-                return res.json(mailbox);
+                return res.redirect('/mailbox/administration');
             });
         });
     },
@@ -139,8 +139,28 @@ module.exports = {
                     });
                 }
                 data.mailboxes = mailboxs;
-                console.log(mailboxs);
                 return res.render('administration/mailbox', data);
+            }
+        });
+    }, mailboxEdit: function (req, res) {
+        var id = req.params.id;
+        var data = [];
+        data.users = req.users;
+        MailboxModel.findOne({_id: id}).populate('owner_id').exec(function (err, mailbox) {
+            {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting mailbox.',
+                        error: err
+                    });
+                }
+                data.mailbox = mailbox;
+                for (i = 0; i < data.users.length; i++) {
+                    if (String(data.users[i]._id) === String(mailbox.owner_id._id)) {
+                        data.users[i].me = true;
+                    }
+                }
+                return res.render('administration/mailboxEdit', data);
             }
         });
     }

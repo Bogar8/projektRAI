@@ -20,7 +20,7 @@
 <h2>Nabiralniki:</h2>
 <hr>
 {{#each mailboxes}}
-    <a href="#" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
+    <a href="/mailbox/administration/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
     <form action="/mailbox/delete/{{_id}}" method="post">
         <input class="btn btn-primary btn-md " type="submit" value="Izbriši">
     </form>

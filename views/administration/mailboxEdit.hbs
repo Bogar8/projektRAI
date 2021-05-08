@@ -1,0 +1,15 @@
+<form action="/mailbox/administration/edit/{{mailbox._id}}" method="post">
+    <label for="owner_id">Izberi lastnika: </label>
+    <select name="owner_id" id="owner_id">
+        {{#each users}}
+            <option value="{{_id}}" {{#if me}}selected{{/if}}>{{username}}</option>
+        {{/each}}
+    </select>
+    <br>
+    <br>
+    <label for="location">Lokacija paketnika</label>
+    <input type="text" name="location" placeholder="Lokacija" value="{{mailbox.location}}" required="">
+    <br>
+    <br>
+    <input class="btn btn-primary btn-md " type="submit" value="Uredi">
+</form>
