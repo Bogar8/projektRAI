@@ -1,0 +1,23 @@
+<h1>Dodaj uporabnikov</h1>
+<form action="/users" method="post">
+    <input type="text" name="email" placeholder="E-mail" required="">
+    <input type="text" name="username" placeholder="Username" required="">
+    <input type="password" name="password" placeholder="Password" required="">
+
+    <input type="submit" value="ADD USER">
+</form>
+<br>
+<br>
+<hr>
+<h2>Nabiralniki:</h2>
+<hr>
+{{#each users}}
+    <a href="/user/administration/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
+    <form action="/user/delete/{{_id}}" method="post">
+        <input class="btn btn-primary btn-md " type="submit" value="Izbriši">
+    </form>
+    <p>Ime: {{username}}<br>
+        Email: {{email}} <br>
+        Je admin: {{#if isAdmin}}DA {{else}} NE{{/if}}</p>
+    <hr>
+{{/each}}

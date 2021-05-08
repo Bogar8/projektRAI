@@ -21,7 +21,7 @@ function checkIfAdmin(req, res, next) { //preveri ali imamo pravice
         next();
     else {
         return res.status(500).json({
-            message: 'You dont have accsecc!'
+            message: 'You dont have access!'
         });
     }
 }

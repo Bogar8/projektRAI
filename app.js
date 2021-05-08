@@ -11,7 +11,9 @@ var mailboxRouter=require('./routes/mailboxRoutes');
 var app = express();
 
 var mongoose = require('mongoose');
-var mongoDB = "mongodb+srv://bogar:geslo@cluster0.iberm.mongodb.net/projektRAI?retryWrites=true&w=majority";
+
+//var mongoDB = "mongodb+srv://bogar:geslo@cluster0.iberm.mongodb.net/projektRAI?retryWrites=true&w=majority";
+var mongoDB = 'mongodb+srv://zan:zan123@feri.qvtf8.mongodb.net/vaja3?retryWrites=true&w=majority';
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;

@@ -11,6 +11,7 @@ module.exports = {
      * userController.list()
      */
     list: function (req, res) {
+        data = [];
         UserModel.find(function (err, users) {
             if (err) {
                 return res.status(500).json({
@@ -18,8 +19,8 @@ module.exports = {
                     error: err
                 });
             }
-
-            return res.json(users);
+            data.users = users;
+            return res.render('administration/user', data);
         });
     },
 
@@ -44,6 +45,24 @@ module.exports = {
             }
 
             return res.json(user);
+        });
+    },
+    userEdit: function (req, res) {
+        UserModel.findOne({_id: id}, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user.',
+                    error: err
+                });
+            }
+
+            if (!user) {
+                return res.status(404).json({
+                    message: 'No such user'
+                });
+            }
+            data.users = user;
+            return res.render('administration/userEdit', data);
         });
     },
 
@@ -144,7 +163,7 @@ module.exports = {
                 return res.redirect('/');
             }
         });
-    },logout: function (req, res, next) { //odjava uporabnika
+    }, logout: function (req, res, next) { //odjava uporabnika
         if (req.session) {
             req.session.destroy(function (err) {
                 if (err) {
@@ -154,5 +173,5 @@ module.exports = {
                 }
             });
         }
-    }
+    },
 };
