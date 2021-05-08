@@ -2,7 +2,7 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
+/*
 a {
   color: #00B7FF;
 }
@@ -27,7 +27,7 @@ li a {
   text-decoration: none;
 }
 
-/* Change the link color to #111 (black) on hover */
+
 li a:hover {
   background-color: #111;
-}
+}*/
