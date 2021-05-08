@@ -56,6 +56,7 @@ module.exports = {
             owner_id: req.body.owner,
             location: req.body.location,
             locked: true,
+            last_accessed: new Date()
         });
 
         mailbox.save(function (err, mailbox) {
@@ -66,7 +67,7 @@ module.exports = {
                 });
             }
 
-            return res.status(201).json(mailbox);
+            return res.redirect(req.get('referer'));
         });
     },
 
@@ -93,6 +94,7 @@ module.exports = {
             mailbox.owner_id = req.body.owner_id ? req.body.owner_id : mailbox.owner_id;
             mailbox.location = req.body.location ? req.body.location : mailbox.location;
             mailbox.locked = req.body.locked ? req.body.locked : mailbox.locked;
+            mailbox.last_accessed = req.body.last_accessed ? req.body.last_accessed : mailbox.last_accessed;
 
             mailbox.save(function (err, mailbox) {
                 if (err) {
