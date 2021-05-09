@@ -155,7 +155,10 @@ module.exports = {
                 user.password = req.body.password ? req.body.password : user.password;
                 bcrypt.hash(user.password, 10, function (err, hash) {
                     if (err) {
-                        return next(err);
+                        return res.status(500).json({
+                            message: 'Error when updating user',
+                            error: err
+                        });
                     }
                     user.password = hash;
 
@@ -172,7 +175,7 @@ module.exports = {
                 user.save(function (err, user) {
                     if (err) {
                         return res.status(500).json({
-                            message: 'Error when creating user',
+                            message: 'Error when updating user',
                             error: err
                         });
                     }
@@ -205,14 +208,17 @@ module.exports = {
                 user.password = req.body.password ? req.body.password : user.password;
                 bcrypt.hash(user.password, 10, function (err, hash) {
                     if (err) {
-                        return next(err);
+                        return res.status(500).json({
+                            message: 'Error when updating user',
+                            error: err
+                        });
                     }
                     user.password = hash;
 
                     user.save(function (err, user) {
                         if (err) {
                             return res.status(500).json({
-                                message: 'Error when creating user',
+                                message: 'Error when updating user',
                                 error: err
                             });
                         }
@@ -229,8 +235,8 @@ module.exports = {
                 });
             }
 
-                return res.redirect('/users/profile');
-            });
+            return res.redirect('/users/profile');
+        });
     },
 
     /**
