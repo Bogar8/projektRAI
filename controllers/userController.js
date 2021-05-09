@@ -1,5 +1,7 @@
 var UserModel = require('../models/userModel.js');
 var MailboxModel = require('../models/mailboxModel.js')
+var bcrypt = require('bcrypt');
+
 /**
  * userController.js
  *
@@ -79,14 +81,20 @@ module.exports = {
             isAdmin: false
         });
 
-
-        user.save(function (err, user) {
+        bcrypt.hash(user.password, 10, function (err, hash) {
             if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating user',
-                    error: err
-                });
+                return next(err);
             }
+            user.password = hash;
+
+            user.save(function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating user',
+                        error: err
+                    });
+                }
+            });
 
             return res.redirect("/")
         });
@@ -100,16 +108,24 @@ module.exports = {
         });
 
 
-        user.save(function (err, user) {
+        bcrypt.hash(user.password, 10, function (err, hash) {
             if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating user',
-                    error: err
-                });
+                return next(err);
             }
+            user.password = hash;
+
+            user.save(function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating user',
+                        error: err
+                    });
+                }
+            });
 
             return res.redirect(req.get('referer'));
         });
+
     },
 
     /**
@@ -133,20 +149,36 @@ module.exports = {
             }
 
             user.username = req.body.username ? req.body.username : user.username;
-            user.password = req.body.password ? req.body.password : user.password;
             user.email = req.body.email ? req.body.email : user.email;
             user.isAdmin = Boolean(req.body.isAdmin);
+            if (req.body.password.length !== 0) {
+                user.password = req.body.password ? req.body.password : user.password;
+                bcrypt.hash(user.password, 10, function (err, hash) {
+                    if (err) {
+                        return next(err);
+                    }
+                    user.password = hash;
 
-            user.save(function (err, user) {
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when updating user.',
-                        error: err
+                    user.save(function (err, user) {
+                        if (err) {
+                            return res.status(500).json({
+                                message: 'Error when creating user',
+                                error: err
+                            });
+                        }
                     });
-                }
-
-                return res.redirect('/users/administration');
-            });
+                });
+            } else {
+                user.save(function (err, user) {
+                    if (err) {
+                        return res.status(500).json({
+                            message: 'Error when creating user',
+                            error: err
+                        });
+                    }
+                });
+            }
+            return res.redirect('/users/administration');
         });
     },
 
@@ -167,22 +199,38 @@ module.exports = {
                 });
             }
 
-            if(req.body.password !== "")
+            user.username = req.body.username ? req.body.username : user.username;
+            user.email = req.body.email ? req.body.email : user.email;
+            if (req.body.password.length !== 0) {
                 user.password = req.body.password ? req.body.password : user.password;
-            if(req.body.email !== "")
-                user.email = req.body.email ? req.body.email : user.email;
+                bcrypt.hash(user.password, 10, function (err, hash) {
+                    if (err) {
+                        return next(err);
+                    }
+                    user.password = hash;
 
-            user.save(function (err, user) {
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when updating user.',
-                        error: err
+                    user.save(function (err, user) {
+                        if (err) {
+                            return res.status(500).json({
+                                message: 'Error when creating user',
+                                error: err
+                            });
+                        }
                     });
-                }
+                });
+            } else {
+                user.save(function (err, user) {
+                    if (err) {
+                        return res.status(500).json({
+                            message: 'Error when creating user',
+                            error: err
+                        });
+                    }
+                });
+            }
 
                 return res.redirect('/users/profile');
             });
-        });
     },
 
     /**
@@ -222,7 +270,21 @@ module.exports = {
             return res.render('user/profile', user);
         });
     }, showEdit: function (req, res) { //pokaze stran za spreminjanje uporabnika
-        return res.render('user/edit');
+        var id = req.session.userId;
+        UserModel.findOne({_id: id}, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user.',
+                    error: err
+                });
+            }
+            if (!user) {
+                return res.status(404).json({
+                    message: 'No such user'
+                });
+            }
+            return res.render('user/edit', user);
+        });
     }, login: function (req, res, next) { //prijava
         UserModel.authenticate(req.body.username, req.body.password, function (error, user) {
             if (error || !user) {
@@ -241,7 +303,7 @@ module.exports = {
     }, showMyMailboxes: function (req, res) {
         var data = [];
         data.users = req.users;
-        MailboxModel.find({owner_id : req.session.userId}).populate('owner_id').exec(function (err, mailboxes) {
+        MailboxModel.find({owner_id: req.session.userId}).populate('owner_id').exec(function (err, mailboxes) {
             {
                 if (err) {
                     return res.status(500).json({
