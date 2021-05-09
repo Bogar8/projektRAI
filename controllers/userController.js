@@ -83,7 +83,10 @@ module.exports = {
 
         bcrypt.hash(user.password, 10, function (err, hash) {
             if (err) {
-                return next(err);
+                return res.status(500).json({
+                    message: 'Error when hashing password.',
+                    error: err
+                });
             }
             user.password = hash;
 
@@ -110,7 +113,10 @@ module.exports = {
 
         bcrypt.hash(user.password, 10, function (err, hash) {
             if (err) {
-                return next(err);
+                return res.status(500).json({
+                    message: 'Error when creating user',
+                    error: err
+                });
             }
             user.password = hash;
 
