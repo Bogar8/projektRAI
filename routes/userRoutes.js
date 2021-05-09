@@ -13,6 +13,17 @@ function checkIfAdmin(req, res, next) { //preveri ali imamo pravice
     }
 }
 
+function requiresLogin(req, res, next){
+    if(req.session && req.session.userId) {
+        return next();
+    }
+    else {
+        var err = new Error("You must be logged in to view this page.");
+        err.status = 401;
+        return next(err);
+    }
+}
+
 /*
  * GET
  */
@@ -22,6 +33,10 @@ router.get('/register', userController.showRegister);
 router.get('/login', userController.showLogin);
 router.get('/logout',userController.logout);
 router.get('/administration/edit/:id', checkIfAdmin, userController.userEdit);
+router.get('/profile', requiresLogin, userController.showProfile);
+router.get('/edit', requiresLogin, userController.showEdit);
+router.get('/myMailboxes', requiresLogin, userController.showMyMailboxes);
+
 /*
  * GET
  */
@@ -35,6 +50,7 @@ router.post('/', userController.create);
 router.post('/administration/create', userController.createAdmin);
 router.post('/login', userController.login);
 router.post('/administration/edit/:id', checkIfAdmin, userController.update);
+router.post('/edit', requiresLogin, userController.edit)
 
 /*
  * PUT

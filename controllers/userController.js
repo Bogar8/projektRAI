@@ -1,5 +1,5 @@
 var UserModel = require('../models/userModel.js');
-
+var MailboxModel = require('../models/mailboxModel.js')
 /**
  * userController.js
  *
@@ -150,6 +150,41 @@ module.exports = {
         });
     },
 
+    edit: function (req, res) {
+        var id = req.session.userId;
+
+        UserModel.findOne({_id: id}, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user',
+                    error: err
+                });
+            }
+
+            if (!user) {
+                return res.status(404).json({
+                    message: 'No such user'
+                });
+            }
+
+            if(req.body.password !== "")
+                user.password = req.body.password ? req.body.password : user.password;
+            if(req.body.email !== "")
+                user.email = req.body.email ? req.body.email : user.email;
+
+            user.save(function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when updating user.',
+                        error: err
+                    });
+                }
+
+                return res.redirect('/users/profile');
+            });
+        });
+    },
+
     /**
      * userController.remove()
      */
@@ -170,6 +205,24 @@ module.exports = {
         return res.render('user/register');
     }, showLogin: function (req, res) { //pokaze stran za prijavo
         return res.render('user/login');
+    }, showProfile: function (req, res) { //pokaze stran za profil
+        var id = req.session.userId;
+        UserModel.findOne({_id: id}, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user.',
+                    error: err
+                });
+            }
+            if (!user) {
+                return res.status(404).json({
+                    message: 'No such user'
+                });
+            }
+            return res.render('user/profile', user);
+        });
+    }, showEdit: function (req, res) { //pokaze stran za spreminjanje uporabnika
+        return res.render('user/edit');
     }, login: function (req, res, next) { //prijava
         UserModel.authenticate(req.body.username, req.body.password, function (error, user) {
             if (error || !user) {
@@ -183,6 +236,21 @@ module.exports = {
                 req.session.login = true;
                 req.session.isAdmin = user.isAdmin;
                 return res.redirect('/');
+            }
+        });
+    }, showMyMailboxes: function (req, res) {
+        var data = [];
+        data.users = req.users;
+        MailboxModel.find({owner_id : req.session.userId}).populate('owner_id').exec(function (err, mailboxes) {
+            {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting mailbox.',
+                        error: err
+                    });
+                }
+                data.mailboxes = mailboxes;
+                return res.render('user/myMailboxes.hbs', data);
             }
         });
     }, logout: function (req, res, next) { //odjava uporabnika
