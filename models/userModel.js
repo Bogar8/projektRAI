@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var bcrypt = require('bcrypt');
 
-
+//TODO: (UPDATE USER WITHOUT PASSWORD HASHES HASEHED PASSWORD)
 var userSchema = new Schema({
 	'username' : String,
 	'password' : String,
