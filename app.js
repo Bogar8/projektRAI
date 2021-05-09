@@ -3,19 +3,39 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var config = require('./config.json');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+var usersRouter = require('./routes/userRoutes');
+var packageRouter = require('./routes/packageRoutes');
+var mailboxRouter=require('./routes/mailboxRoutes');
 var app = express();
 
 var mongoose = require('mongoose');
-var mongoDB = "mongodb+srv://bogar:geslo@cluster0.iberm.mongodb.net/projektRAI?retryWrites=true&w=majority";
+var mongoDB = config.dbString;
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
+
+//shranjevanje seje
+var session = require('express-session');
+var MongoStore = require('connect-mongo');
+app.use(session({
+  secret: 'work hard',
+  resave: true,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: mongoDB })
+}));
+
+
+//na vsaki strani dostop do session spremenljivk ter nastavitev titla
+app.use(function(req, res, next){
+  res.locals.session = req.session;
+  res.locals.title="Pametni paketnik"
+  next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,6 +49,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/package', packageRouter);
+app.use('/mailbox',mailboxRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
