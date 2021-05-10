@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userController = require('../controllers/userController.js');
-
+var mailboxController = require('../controllers/mailboxController.js');
 
 function checkIfAdmin(req, res, next) { //preveri ali imamo pravice
     if (req.session.isAdmin === true)
@@ -36,7 +36,7 @@ router.get('/administration/edit/:id', checkIfAdmin, userController.userEdit);
 router.get('/profile', requiresLogin, userController.showProfile);
 router.get('/edit', requiresLogin, userController.showEdit);
 router.get('/myMailboxes', requiresLogin, userController.showMyMailboxes);
-
+router.get('/myMailboxes/edit/:id', requiresLogin, userController.editMyMailbox);
 /*
  * GET
  */
@@ -51,7 +51,7 @@ router.post('/administration/create', userController.createAdmin);
 router.post('/login', userController.login);
 router.post('/administration/edit/:id', checkIfAdmin, userController.update);
 router.post('/edit', requiresLogin, userController.edit)
-
+router.post('/myMailboxes/edit/:id', requiresLogin, mailboxController.mailboxUserUpdate);
 /*
  * PUT
  */

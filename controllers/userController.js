@@ -324,10 +324,26 @@ module.exports = {
                     });
                 }
                 data.mailboxes = mailboxes;
-                return res.render('user/myMailboxes.hbs', data);
+                return res.render('user/myMailboxes', data);
             }
         });
-    }, logout: function (req, res, next) { //odjava uporabnika
+    }, editMyMailbox: function(req, res, next) {
+        var id = req.params.id;
+        var data = [];
+        data.users = req.users;
+        MailboxModel.findOne({_id: id}).populate('owner_id').exec(function (err, mailbox) {
+            {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting mailbox.',
+                        error: err
+                    });
+                }
+                data.mailbox = mailbox;
+                return res.render('user/myMailboxesEdit', data);
+            }
+        });
+    },logout: function (req, res, next) { //odjava uporabnika
         if (req.session) {
             req.session.destroy(function (err) {
                 if (err) {

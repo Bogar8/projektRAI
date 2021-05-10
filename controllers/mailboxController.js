@@ -109,6 +109,41 @@ module.exports = {
         });
     },
 
+    mailboxUserUpdate: function (req, res) {
+        var id = req.params.id;
+
+        MailboxModel.findOne({_id: id}, function (err, mailbox) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting mailbox',
+                    error: err
+                });
+            }
+
+            if (!mailbox) {
+                return res.status(404).json({
+                    message: 'No such mailbox'
+                });
+            }
+
+            mailbox.owner_id = req.body.owner_id ? req.body.owner_id : mailbox.owner_id;
+            mailbox.location = req.body.location ? req.body.location : mailbox.location;
+            mailbox.locked = req.body.locked ? req.body.locked : mailbox.locked;
+            mailbox.last_accessed = req.body.last_accessed ? req.body.last_accessed : mailbox.last_accessed;
+
+            mailbox.save(function (err, mailbox) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when updating mailbox.',
+                        error: err
+                    });
+                }
+
+                return res.redirect('/users/myMailboxes');
+            });
+        });
+    },
+
     /**
      * mailboxController.remove()
      */
