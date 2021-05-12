@@ -9,6 +9,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/userRoutes');
 var packageRouter = require('./routes/packageRoutes');
 var mailboxRouter=require('./routes/mailboxRoutes');
+var packageAccessRouter=require('./routes/packageAccessRoutes');
 var app = express();
 
 var mongoose = require('mongoose');
@@ -51,6 +52,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/package', packageRouter);
 app.use('/mailbox',mailboxRouter);
+app.use('/packageAccess',packageAccessRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

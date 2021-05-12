@@ -16,6 +16,7 @@ router.get('/:id', packageAccessController.show);
  * POST
  */
 router.post('/', packageAccessController.create);
+router.post('/api/create', packageAccessController.apiAddAccessToMyMailbox);
 
 /*
  * PUT
