@@ -327,7 +327,7 @@ module.exports = {
                 return res.render('user/myMailboxes', data);
             }
         });
-    }, editMyMailbox: function(req, res, next) {
+    }, editMyMailbox: function (req, res, next) {
         var id = req.params.id;
         var data = [];
         data.users = req.users;
@@ -343,7 +343,7 @@ module.exports = {
                 return res.render('user/myMailboxesEdit', data);
             }
         });
-    },logout: function (req, res, next) { //odjava uporabnika
+    }, logout: function (req, res, next) { //odjava uporabnika
         if (req.session) {
             req.session.destroy(function (err) {
                 if (err) {
@@ -351,6 +351,36 @@ module.exports = {
                 } else {
                     return res.redirect('/');
                 }
+            });
+        }
+    },
+
+    //API---------------------------------------------------
+    apiRegisterUser: function (req, res) {
+        if (!req.body.username || !req.body.password || !req.body.email) {
+            return res.json({successful: false, message: "Error not all data have been set!"});
+        } else {
+
+            var user = new UserModel({
+                username: req.body.username,
+                password: req.body.password,
+                email: req.body.email,
+                isAdmin: false
+            });
+
+            bcrypt.hash(user.password, 10, function (err, hash) {
+                if (err) {
+                    return res.json({successful: false, message: "Error when hashing password"});
+                }
+                user.password = hash;
+
+                user.save(function (err, user) {
+                    if (err) {
+                        return res.json({successful: false, message: "Error when saving user to database!"});
+                    }
+                });
+
+                return res.json({successful: true, message: "User successfully added!"});
             });
         }
     },
