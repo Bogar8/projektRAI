@@ -383,5 +383,28 @@ module.exports = {
                 return res.json({successful: true, message: "User successfully added!"});
             });
         }
+    }, apiLogin: function (req, res, next) { //prijava
+        if (!req.body.username || !req.body.password) {
+            return res.json({successful: false, message: "Error not all data have been set!"});
+        } else {
+            UserModel.authenticate(req.body.username, req.body.password, function (error, user) {
+                if (error || !user) {
+                    return res.json({successful: false, message: "Error wrong username or password!"});
+                } else {
+                    req.session.userId = user._id;
+                    req.session.username = user.username;
+                    req.session.login = true;
+                    req.session.isAdmin = user.isAdmin;
+                    return res.json({
+                        successful: true,
+                        message: "Login successful!",
+                        userId: user._id,
+                        username: user.username,
+                        isAdmin: user.isAdmin,
+                        email: user.email
+                    });
+                }
+            });
+        }
     },
 };

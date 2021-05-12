@@ -53,6 +53,7 @@ router.post('/administration/edit/:id', checkIfAdmin, userController.update);
 router.post('/edit', requiresLogin, userController.edit)
 router.post('/myMailboxes/edit/:id', requiresLogin, mailboxController.mailboxUserUpdate);
 router.post('/api/create',userController.apiRegisterUser);
+router.post('/api/login',userController.apiLogin);
 /*
  * PUT
  */

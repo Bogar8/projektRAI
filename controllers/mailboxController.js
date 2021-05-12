@@ -198,5 +198,26 @@ module.exports = {
                 return res.render('administration/mailboxEdit', data);
             }
         });
+    },
+
+    //API----------------------------------
+    apiShowMyMailboxes: function (req, res) {
+        if (!req.body.userId) {
+            return res.json({successful: false, message: "Error no parameters!"});
+        } else {
+            MailboxModel.find({owner_id: req.body.userId}).populate('owner_id').exec(function (err, mailboxes) {
+                {
+                    if (err) {
+                        return res.json({successful: false, message: "Error when getting mailboxes!"});
+                    }
+                    return res.json({
+                        successful: true,
+                        message: "Getting mailboxes was successful!",
+                        mailboxes: mailboxes
+                    });
+
+                }
+            });
+        }
     }
 }

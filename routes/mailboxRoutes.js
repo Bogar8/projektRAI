@@ -43,6 +43,7 @@ router.get('/:id', mailboxController.show);
 router.post('/', mailboxController.create);
 router.post('/delete/:id', checkIfAdmin, mailboxController.remove);
 router.post('/administration/edit/:id', checkIfAdmin, mailboxController.update);
+router.post('/api/myMailboxes',mailboxController.apiShowMyMailboxes);
 
 
 /*
