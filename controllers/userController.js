@@ -391,10 +391,6 @@ module.exports = {
                 if (error || !user) {
                     return res.json({successful: false, message: "Error wrong username or password!"});
                 } else {
-                    req.session.userId = user._id;
-                    req.session.username = user.username;
-                    req.session.login = true;
-                    req.session.isAdmin = user.isAdmin;
                     return res.json({
                         successful: true,
                         message: "Login successful!",
