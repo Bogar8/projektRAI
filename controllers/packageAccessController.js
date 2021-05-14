@@ -72,11 +72,13 @@ module.exports = {
     },
 
     apiAddAccessToMyMailbox: function (req, res) {
-        if (!req.body.username || !req.body.mailbox_code || !req.body.date_from || !req.body.date_to)
+        if (!req.body.username || !req.body.mailbox_code || !req.body.date_from || !req.body.date_to || !req.body.user_id)
             return res.json({successful: false, message: "Error not all data have been set!"});
         MailboxModel.findOne({code: req.body.mailbox_code}, function (err, mailbox) {
             if (err) {
                 return res.json({successful: false, message: "Error when getting mailbox!"});
+            }else if(String(mailbox.owner_id)!==String(req.body.user_id)){
+                return res.json({successful: false, message: "Only owner of mailbox can add access!"});
             }
 
             UserModel.findOne({username: req.body.username}, function (err, user) {
