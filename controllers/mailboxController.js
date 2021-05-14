@@ -56,7 +56,8 @@ module.exports = {
             owner_id: req.body.owner,
             location: req.body.location,
             locked: true,
-            last_accessed: new Date()
+            last_accessed: new Date(),
+            code: req.body.code
         });
 
         mailbox.save(function (err, mailbox) {
@@ -95,6 +96,7 @@ module.exports = {
             mailbox.location = req.body.location ? req.body.location : mailbox.location;
             mailbox.locked = req.body.locked ? req.body.locked : mailbox.locked;
             mailbox.last_accessed = req.body.last_accessed ? req.body.last_accessed : mailbox.last_accessed;
+            mailbox.code = req.body.code ? req.body.code : mailbox.code;
 
             mailbox.save(function (err, mailbox) {
                 if (err) {

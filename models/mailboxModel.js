@@ -8,7 +8,8 @@ var mailboxSchema = new Schema({
 	},
 	'location' : String,
 	'locked' : Boolean,
-	'last_accessed' : Date
+	'last_accessed' : Date,
+	'code' : String
 });
 
 module.exports = mongoose.model('mailbox', mailboxSchema);

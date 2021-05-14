@@ -1,5 +1,6 @@
 var PackageaccessModel = require('../models/packageAccessModel.js');
 var UserModel = require("../models/userModel");
+var MailboxModel = require('../models/mailboxModel.js');
 /**
  * packageAccessController.js
  *
@@ -52,10 +53,10 @@ module.exports = {
      */
     create: function (req, res) {
         var packageAccess = new PackageaccessModel({
-			user_id : req.body.user_id,
-			date_from : req.body.date_from,
-			date_to : req.body.date_to,
-			date_accessed : req.body.date_accessed
+            user_id: req.body.user_id,
+            date_from: req.body.date_from,
+            date_to: req.body.date_to,
+            date_accessed: req.body.date_accessed
         });
 
         packageAccess.save(function (err, packageAccess) {
@@ -116,7 +117,26 @@ module.exports = {
                 if (err) {
                     return res.json({successful: false, message: "Error when saving package access!"});
                 }
-                return res.json({successful: true, message: "Access successfully used!"});
+
+                MailboxModel.findOne({_id: packageAccess.mailbox_id}, function (err, mailbox) {
+                    if (err) {
+                        return res.json({successful: false, message: "Error when getting mailbox!"});
+                    }
+
+                    if (!mailbox) {
+                        return res.json({successful: false, message: "Error no mailbox found!"});
+                    }
+
+
+                    mailbox.last_accessed = new Date().toISOString();
+                    mailbox.save(function (err, mailbox) {
+                        if (err) {
+                            return res.json({successful: false, message: "Error when saving mailbox!"});
+                        }
+
+                        return res.json({successful: true, message: "Access successfully used!"});
+                    });
+                });
             });
         });
     },
@@ -142,10 +162,10 @@ module.exports = {
             }
 
             packageAccess.user_id = req.body.user_id ? req.body.user_id : packageAccess.user_id;
-			packageAccess.date_from = req.body.date_from ? req.body.date_from : packageAccess.date_from;
-			packageAccess.date_to = req.body.date_to ? req.body.date_to : packageAccess.date_to;
-			packageAccess.date_accessed = req.body.date_accessed ? req.body.date_accessed : packageAccess.date_accessed;
-			
+            packageAccess.date_from = req.body.date_from ? req.body.date_from : packageAccess.date_from;
+            packageAccess.date_to = req.body.date_to ? req.body.date_to : packageAccess.date_to;
+            packageAccess.date_accessed = req.body.date_accessed ? req.body.date_accessed : packageAccess.date_accessed;
+
             packageAccess.save(function (err, packageAccess) {
                 if (err) {
                     return res.status(500).json({
@@ -157,7 +177,10 @@ module.exports = {
                 return res.json(packageAccess);
             });
         });
-    },
+    }
+
+
+    ,
 
     /**
      * packageAccessController.remove()
