@@ -69,6 +69,7 @@ module.exports = {
             return res.status(201).json(packageAccess);
         });
     },
+
     apiAddAccessToMyMailbox: function (req, res) {
         if (!req.body.username || !req.body.mailbox_id || !req.body.date_from || !req.body.date_to)
             return res.json({successful: false, message: "Error not all data have been set!"});
@@ -93,6 +94,29 @@ module.exports = {
                     return res.json({successful: false, message: "Error when creating packageAccess!"});
                 }
                 return res.json({successful: true, message: "Access successfully added!"});
+            });
+        });
+    },
+
+    apiCheckIfCanAccessMailbox: function (req, res) {
+        if (!req.body.user_id || !req.body.mailbox_id)
+            return res.json({successful: false, message: "Error not all data have been set!"});
+        PackageaccessModel.findOne({date_from: { $lte: new Date().toISOString() }, date_to: { $gte: new Date().toISOString() }, user_id: req.body.user_id, mailbox_id: req.body.mailbox_id, date_accessed: ""  }, function (err, packageAccess) {
+            if (err) {
+                return res.json({successful: false, message: "Error when getting package access!"});
+            }
+
+            if (!packageAccess) {
+                return res.json({successful: false, message: "No such package acces!"});
+            }
+
+            packageAccess.date_accessed = new Date().toISOString();
+
+            packageAccess.save(function (err, packageAccess) {
+                if (err) {
+                    return res.json({successful: false, message: "Error when saving package access!"});
+                }
+                return res.json({successful: true, message: "Access successfully used!"});
             });
         });
     },
