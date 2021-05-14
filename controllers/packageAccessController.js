@@ -72,62 +72,67 @@ module.exports = {
     },
 
     apiAddAccessToMyMailbox: function (req, res) {
-        if (!req.body.username || !req.body.mailbox_id || !req.body.date_from || !req.body.date_to)
+        if (!req.body.username || !req.body.mailbox_code || !req.body.date_from || !req.body.date_to)
             return res.json({successful: false, message: "Error not all data have been set!"});
-        UserModel.findOne({username: req.body.username}, function (err, user) {
+        MailboxModel.findOne({code: req.body.mailbox_code}, function (err, mailbox) {
             if (err) {
-                return res.json({successful: false, message: "Error when getting user!"});
+                return res.json({successful: false, message: "Error when getting mailbox!"});
             }
 
-            if (!user) {
-                return res.json({successful: false, message: "No such user!"});
-            }
-            var packageAccess = new PackageaccessModel({
-                user_id: user._id,
-                mailbox_id: req.body.mailbox_id,
-                date_from: req.body.date_from,
-                date_to: req.body.date_to,
-                date_accessed: ""
-            });
-
-            packageAccess.save(function (err, packageAccess) {
+            UserModel.findOne({username: req.body.username}, function (err, user) {
                 if (err) {
-                    return res.json({successful: false, message: "Error when creating packageAccess!"});
+                    return res.json({successful: false, message: "Error when getting user!"});
                 }
-                return res.json({successful: true, message: "Access successfully added!"});
+
+                if (!user) {
+                    return res.json({successful: false, message: "No such user!"});
+                }
+                var packageAccess = new PackageaccessModel({
+                    user_id: user._id,
+                    mailbox_id: mailbox._id,
+                    date_from: req.body.date_from,
+                    date_to: req.body.date_to,
+                    date_accessed: ""
+                });
+
+                packageAccess.save(function (err, packageAccess) {
+                    if (err) {
+                        return res.json({successful: false, message: "Error when creating packageAccess!"});
+                    }
+                    return res.json({successful: true, message: "Access successfully added!"});
+                });
             });
         });
     },
 
     apiCheckIfCanAccessMailbox: function (req, res) {
-        if (!req.body.user_id || !req.body.mailbox_id)
+        if (!req.body.user_id || !req.body.mailbox_code)
             return res.json({successful: false, message: "Error not all data have been set!"});
-        PackageaccessModel.findOne({date_from: { $lte: new Date().toISOString() }, date_to: { $gte: new Date().toISOString() }, user_id: req.body.user_id, mailbox_id: req.body.mailbox_id, date_accessed: ""  }, function (err, packageAccess) {
+        MailboxModel.findOne({code: req.body.mailbox_code}, function (err, mailbox) {
             if (err) {
-                return res.json({successful: false, message: "Error when getting package access!"});
+                return res.json({successful: false, message: "Error when getting mailbox!"});
             }
-
-            if (!packageAccess) {
-                return res.json({successful: false, message: "No such package acces!"});
-            }
-
-            packageAccess.date_accessed = new Date().toISOString();
-
-            packageAccess.save(function (err, packageAccess) {
+            PackageaccessModel.findOne({
+                date_from: {$lte: new Date().toISOString()},
+                date_to: {$gte: new Date().toISOString()},
+                user_id: req.body.user_id,
+                mailbox_id: mailbox._id,
+                date_accessed: ""
+            }, function (err, packageAccess) {
                 if (err) {
-                    return res.json({successful: false, message: "Error when saving package access!"});
+                    return res.json({successful: false, message: "Error when getting package access!"});
                 }
 
-                MailboxModel.findOne({_id: packageAccess.mailbox_id}, function (err, mailbox) {
+                if (!packageAccess) {
+                    return res.json({successful: false, message: "No such package acces!"});
+                }
+
+                packageAccess.date_accessed = new Date().toISOString();
+
+                packageAccess.save(function (err, packageAccess) {
                     if (err) {
-                        return res.json({successful: false, message: "Error when getting mailbox!"});
+                        return res.json({successful: false, message: "Error when saving package access!"});
                     }
-
-                    if (!mailbox) {
-                        return res.json({successful: false, message: "Error no mailbox found!"});
-                    }
-
-
                     mailbox.last_accessed = new Date().toISOString();
                     mailbox.save(function (err, mailbox) {
                         if (err) {
