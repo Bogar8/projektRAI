@@ -30,7 +30,7 @@ body.password - Geslo
 body.email - E-mail  
 Vrne true ali false in sporočilo glede na to ali je bila registracija uspešna
 
-###/users/api/login
+### /users/api/login
 body.username - Uporabniško ime
 body.password - Geslo
 Vrne true ali false in sporočilo glede na to ali je bila prijava uspešna
