@@ -77,7 +77,7 @@ module.exports = {
         MailboxModel.findOne({code: req.body.mailbox_code}, function (err, mailbox) {
             if (err) {
                 return res.json({successful: false, message: "Error when getting mailbox!"});
-            }else if(String(mailbox.owner_id)!==String(req.body.user_id)){
+            } else if (String(mailbox.owner_id) !== String(req.body.user_id)) {
                 return res.json({successful: false, message: "Only owner of mailbox can add access!"});
             }
 
@@ -113,39 +113,49 @@ module.exports = {
         MailboxModel.findOne({code: req.body.mailbox_code}, function (err, mailbox) {
             if (err) {
                 return res.json({successful: false, message: "Error when getting mailbox!"});
-            }
-            PackageaccessModel.findOne({
-                date_from: {$lte: new Date().toISOString()},
-                date_to: {$gte: new Date().toISOString()},
-                user_id: req.body.user_id,
-                mailbox_id: mailbox._id,
-                date_accessed: ""
-            }, function (err, packageAccess) {
-                if (err) {
-                    return res.json({successful: false, message: "Error when getting package access!"});
-                }
-
-                if (!packageAccess) {
-                    return res.json({successful: false, message: "No such package acces!"});
-                }
-
-                packageAccess.date_accessed = new Date().toISOString();
-
-                packageAccess.save(function (err, packageAccess) {
+            } else if (String(req.body.user_id) === String(mailbox.owner_id)) {
+                mailbox.last_accessed = new Date().toISOString();
+                mailbox.save(function (err, mailbox) {
                     if (err) {
-                        return res.json({successful: false, message: "Error when saving package access!"});
+                        return res.json({successful: false, message: "Error when saving mailbox!"});
                     }
-                    mailbox.last_accessed = new Date().toISOString();
-                    mailbox.save(function (err, mailbox) {
+                    return res.json({successful: true, message: "Access successfully used!"});
+                });
+            } else {
+                PackageaccessModel.findOne({
+                    date_from: {$lte: new Date().toISOString()},
+                    date_to: {$gte: new Date().toISOString()},
+                    user_id: req.body.user_id,
+                    mailbox_id: mailbox._id,
+                    date_accessed: ""
+                }, function (err, packageAccess) {
+                    if (err) {
+                        return res.json({successful: false, message: "Error when getting package access!"});
+                    }
+
+                    if (!packageAccess) {
+                        return res.json({successful: false, message: "No such package acces!"});
+                    }
+
+                    packageAccess.date_accessed = new Date().toISOString();
+
+                    packageAccess.save(function (err, packageAccess) {
                         if (err) {
-                            return res.json({successful: false, message: "Error when saving mailbox!"});
+                            return res.json({successful: false, message: "Error when saving package access!"});
                         }
 
-                        return res.json({successful: true, message: "Access successfully used!"});
+                        mailbox.last_accessed = new Date().toISOString();
+                        mailbox.save(function (err, mailbox) {
+                            if (err) {
+                                return res.json({successful: false, message: "Error when saving mailbox!"});
+                            }
+                            return res.json({successful: true, message: "Access successfully used!"});
+                        });
                     });
                 });
-            });
+            }
         });
+
     },
 
     /**
