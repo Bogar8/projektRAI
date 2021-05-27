@@ -139,7 +139,7 @@ module.exports = {
             if (err)
                 return res.json({successful: false, message: "error!"});
             if (String(results) === "error")
-                return res.json({successful: false, message: "error!"});
+                return res.json({successful: false, message: "error python!"});
             var userFace = new UserfaceModel({
                 user_id: req.body.user_id,
                 data: String(results)
@@ -163,7 +163,7 @@ module.exports = {
         fs.writeFile(path, photo, function (err) {
             if (err) return console.log(err);
         });
-        UserfaceModel.find(function (err, userFaces) {
+        UserfaceModel.find().populate('user_id').exec(function (err, userFaces) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting userFace.',
@@ -195,9 +195,9 @@ module.exports = {
                 if (String(results) === "No matching")
                     return res.json({successful: false, message: "No matching"});
 
-                console.log(results)
-                let id = userFaces[Number(results)].user_id
-                return res.json({successful: true, message: "User successfully added!", user_id: id});
+
+                let user = userFaces[Number(results)].user_id
+                return res.json({successful: true, message: "Face recognized!", user_id: user._id, username:user.username, email:user.email, isAdmin: user.isAdmin});
             });
         });
     },
