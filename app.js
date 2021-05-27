@@ -10,6 +10,7 @@ var usersRouter = require('./routes/userRoutes');
 var packageRouter = require('./routes/packageRoutes');
 var mailboxRouter=require('./routes/mailboxRoutes');
 var packageAccessRouter=require('./routes/packageAccessRoutes');
+var userFaceRouter=require('./routes/userFaceRoutes');
 var app = express();
 
 var mongoose = require('mongoose');
@@ -19,6 +20,8 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 
 //shranjevanje seje
 var session = require('express-session');
@@ -53,6 +56,7 @@ app.use('/users', usersRouter);
 app.use('/package', packageRouter);
 app.use('/mailbox',mailboxRouter);
 app.use('/packageAccess',packageAccessRouter);
+app.use('/face',userFaceRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
