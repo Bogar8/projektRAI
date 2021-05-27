@@ -135,8 +135,11 @@ module.exports = {
             args: path
         };
 
-        PythonShell.run('python/znacilnice.py', options, function (err, results) {
-            if (err) throw err;
+        PythonShell.run('python/znacilnica.py', options, function (err, results) {
+            if (err)
+                return res.json({successful: false, message: "error!"});
+            if (String(results) === "error")
+                return res.json({successful: false, message: "error!"});
             var userFace = new UserfaceModel({
                 user_id: req.body.user_id,
                 data: String(results)
@@ -183,14 +186,19 @@ module.exports = {
                 args: [path, paths]
             };
             PythonShell.run('python/compare.py', options, function (err, results) {
-                    if (err) {
-                        console.log(err)
-                        return res.json({successful: false, message: "error!"});
-                    }
-                    console.log(results)
-                    let id = userFaces[Number(results)].user_id
-                    return res.json({successful: true, message: "User successfully added!", user_id: id});
-                });
+                if (err) {
+                    console.log(err)
+                    return res.json({successful: false, message: "error!"});
+                }
+                if (String(results) === "error")
+                    return res.json({successful: false, message: "error!"});
+                if (String(results) === "No matching")
+                    return res.json({successful: false, message: "No matching"});
+
+                console.log(results)
+                let id = userFaces[Number(results)].user_id
+                return res.json({successful: true, message: "User successfully added!", user_id: id});
             });
-        },
-    };
+        });
+    },
+};

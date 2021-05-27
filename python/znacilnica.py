@@ -36,4 +36,7 @@ def main():
     hog = getHOG(image2)
     print(hog.tostring().hex())
 
-main()
+try:
+    main()
+except:
+    print("error")

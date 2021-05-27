@@ -49,5 +49,10 @@ def main():
 
     if max > 0.4:
         print(index)
+    else:
+        print("No matching")
 
-main()
+try:
+    main()
+except:
+    print("error")
