@@ -324,6 +324,10 @@ module.exports = {
                     });
                 }
                 data.mailboxes = mailboxes;
+                data.mailboxes.forEach(element => {
+                    var date = new Date(element.last_accessed);
+                    element.last_accessed_date = date.getHours() + ":" + date.getMinutes() + ", " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+                });
                 return res.render('user/myMailboxes', data);
             }
         });
