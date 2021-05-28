@@ -126,12 +126,18 @@ module.exports = {
     addPhoto: function (req, res) {
         let photo = req.body.photo
         let path = "tmp/tmp.txt"
+        let dir = './tmp';
+
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+
         fs.writeFile(path, photo, function (err) {
             if (err) return console.log(err);
         });
         let options = {
             mode: 'text',
-            pythonPath: config.pythonPath,
+            pythonPath: config.pythonlocation,
             pythonOptions: ['-u'],
             args: path
         };
@@ -161,6 +167,11 @@ module.exports = {
         let photo = req.body.photo
         let path = "tmp/tmp.txt"
         let paths = []
+        let dir = './tmp';
+
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
         fs.writeFile(path, photo, function (err) {
             if (err) return console.log(err);
         });
@@ -183,7 +194,7 @@ module.exports = {
 
             let options = {
                 mode: 'text',
-                pythonPath: config.pythonPath,
+                pythonPath: config.pythonlocation,
                 args: [path, paths]
             };
             PythonShell.run('python/compare.py', options, function (err, results) {
