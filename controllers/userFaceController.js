@@ -1,5 +1,6 @@
 var UserfaceModel = require('../models/userFaceModel.js');
 const {PythonShell} = require('python-shell');
+var config = require('../config.json');
 fs = require('fs');
 /**
  * userFaceController.js
@@ -130,7 +131,7 @@ module.exports = {
         });
         let options = {
             mode: 'text',
-            pythonPath: 'C:\\Users\\blazb\\Desktop\\2.letnik2.sem\\rac_vid\\venv\\Scripts\\python.exe',
+            pythonPath: config.pythonPath,
             pythonOptions: ['-u'],
             args: path
         };
@@ -182,7 +183,7 @@ module.exports = {
 
             let options = {
                 mode: 'text',
-                pythonPath: 'C:\\Users\\blazb\\Desktop\\2.letnik2.sem\\rac_vid\\venv\\Scripts\\python.exe',
+                pythonPath: config.pythonPath,
                 args: [path, paths]
             };
             PythonShell.run('python/compare.py', options, function (err, results) {
