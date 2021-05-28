@@ -23,7 +23,23 @@ module.exports = {
             return res.json(packageAccesss);
         });
     },
-
+    accessHistoryList: function (req, res) {
+        var data = []
+        PackageaccessModel.find({mailbox_id : req.params.id, date_accessed: { $ne: null } }).populate("user_id").populate("mailbox_id").exec(function (err, accesses) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting packageAccess.',
+                    error: err
+                });
+            }
+            data.accesses = accesses
+            data.accesses.forEach(element => {
+                var date = new Date(element.date_accessed);
+                element.date = date.getHours() + ":" + date.getMinutes() + ", " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+            });
+            return res.render('user/myMailboxesAccessHistory', data);
+        });
+    },
     /**
      * packageAccessController.show()
      */

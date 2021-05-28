@@ -2,13 +2,11 @@
 <hr>
 {{#each mailboxes}}
     <a href="/users/myMailboxes/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
-    <form action="/mailbox/delete/{{_id}}" method="post">
-        <input class="btn btn-primary btn-md " type="submit" value="Izbriši">
-    </form>
+    <a href="/packageAccess/accessHistory/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Zgodovina dostopov</a>
     <p>Lastnik: {{owner_id.username}}<br>
         Koda : {{code}} <br>
         Lokacija: {{location}} <br>
-        Nazadnje odklenjen: {{last_accessed}} <br>
+        Nazadnje odklenjen: {{last_accessed_date}} <br>
         Zaklenjen: {{#if locked}}DA {{else}} NE{{/if}}</p>
 
     <hr>
