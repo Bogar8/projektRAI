@@ -3,6 +3,7 @@
 {{#each mailboxes}}
     <a href="/users/myMailboxes/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
     <a href="/packageAccess/accessHistory/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Zgodovina dostopov</a>
+    <a href="/users/grantAccess/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Dodaj dostop</a>
     <p>Lastnik: {{owner_id.username}}<br>
         Koda : {{code}} <br>
         Lokacija: {{location}} <br>

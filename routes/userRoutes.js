@@ -37,6 +37,7 @@ router.get('/profile', requiresLogin, userController.showProfile);
 router.get('/edit', requiresLogin, userController.showEdit);
 router.get('/myMailboxes', requiresLogin, userController.showMyMailboxes);
 router.get('/myMailboxes/edit/:id', requiresLogin, userController.editMyMailbox);
+router.get('/grantAccess/:id', requiresLogin, userController.showGrantAccess);
 /*
  * GET
  */

@@ -87,6 +87,42 @@ module.exports = {
         });
     },
 
+    grantAccess: function (req, res, next) {
+        if (!req.body.mailbox_id || !req.body.date_from || !req.body.date_to || !req.body.user_id)
+            return res.json({successful: false, message: "Error not all data have been set!"});
+        MailboxModel.findOne({code: req.body.mailbox_id}, function (err, mailbox) {
+            if (err) {
+                return res.json({successful: false, message: "Error when getting mailbox!"});
+            } else if (String(mailbox.owner_id) !== String(req.body.user_id)) {
+                return res.json({successful: false, message: "Only owner of mailbox can add access!"});
+            }
+
+            UserModel.findOne({_id: req.body.user_id}, function (err, user) {
+                if (err) {
+                    return res.json({successful: false, message: "Error when getting user!"});
+                }
+
+                if (!user) {
+                    return res.json({successful: false, message: "No such user!"});
+                }
+                var packageAccess = new PackageaccessModel({
+                    user_id: user._id,
+                    mailbox_id: mailbox._id,
+                    date_from: req.body.date_from,
+                    date_to: req.body.date_to,
+                    date_accessed: ""
+                });
+
+                packageAccess.save(function (err, packageAccess) {
+                    if (err) {
+                        return res.json({successful: false, message: "Error when creating packageAccess!"});
+                    }
+                    return res.json({successful: true, message: "Access successfully added!"});
+                });
+            });
+        });
+    },
+
     apiAddAccessToMyMailbox: function (req, res) {
         if (!req.body.username || !req.body.mailbox_code || !req.body.date_from || !req.body.date_to || !req.body.user_id)
             return res.json({successful: false, message: "Error not all data have been set!"});

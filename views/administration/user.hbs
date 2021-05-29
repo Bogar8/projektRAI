@@ -1,4 +1,4 @@
-<h1>Dodaj uporabnikov</h1>
+<h1>Dodaj uporabnika:</h1>
 <form action="/users/administration/create" method="post">
     <input type="text" name="email" placeholder="E-mail" required="">
     <input type="text" name="username" placeholder="Username" required="">
@@ -10,7 +10,7 @@
 <br>
 <br>
 <hr>
-<h2>Nabiralniki:</h2>
+<h2>Uporabniki:</h2>
 <hr>
 {{#each users}}
     <a href="/users/administration/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>

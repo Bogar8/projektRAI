@@ -1,0 +1,24 @@
+<h2>Paketnik:</h2>
+<hr>
+<p>Lastnik: {{owner_id.username}}<br>
+    Koda : {{code}} <br>
+    Lokacija: {{location}} <br>
+    Nazadnje odklenjen: {{last_accessed_date}} <br>
+    Zaklenjen: {{#if locked}}DA {{else}} NE{{/if}}</p>
+<h2>Dodaj dostop:</h2>
+<form action="/packageAccess/grantAccess" method="post">
+    <p>Od: <input type="date" id="start" name="date_from"></p>
+    <p>Do: <input type="date" id="end" name="date_to"></p>
+    {{#each users}}
+        <p><input type="checkbox" id="{{_id}}" name="user_id" value="{{_id}}">
+            Ime: {{username}}<br>
+            Email: {{email}} <br>
+            Je admin: {{#if isAdmin}}DA {{else}} NE{{/if}}</p>
+        <hr>
+    {{/each}}
+    <input type="text" id="mailboxId" name="mailbox_d" hidden>
+    <div class="tp">
+        <input type="submit" value="Dodaj dostop">
+    </div>
+</form>
+<hr>

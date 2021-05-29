@@ -30,6 +30,7 @@ router.get('/:id', packageAccessController.show);
 router.post('/', packageAccessController.create);
 router.post('/api/create', packageAccessController.apiAddAccessToMyMailbox);
 router.post('/api/access', packageAccessController.apiCheckIfCanAccessMailbox);
+router.post('/grantAccess', requiresLogin, packageAccessController.grantAccess);
 
 /*
  * PUT
