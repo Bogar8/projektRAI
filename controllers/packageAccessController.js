@@ -88,16 +88,17 @@ module.exports = {
     },
 
     grantAccess: function (req, res, next) {
-        if (!req.body.mailbox_id || !req.body.date_from || !req.body.date_to || !req.body.user_id)
+        if (!req.body.username || !req.body.mailbox_id || !req.body.date_from || !req.body.date_to || !req.body.user_id)
             return res.json({successful: false, message: "Error not all data have been set!"});
-        MailboxModel.findOne({code: req.body.mailbox_id}, function (err, mailbox) {
+
+        MailboxModel.findOne({_id: req.body.mailbox_id}, function (err, mailbox) {
             if (err) {
                 return res.json({successful: false, message: "Error when getting mailbox!"});
-            } else if (String(mailbox.owner_id) !== String(req.body.user_id)) {
+            } else if (String(mailbox.owner_id) !== String(req.session.userId)) {
                 return res.json({successful: false, message: "Only owner of mailbox can add access!"});
             }
 
-            UserModel.findOne({_id: req.body.user_id}, function (err, user) {
+            UserModel.findOne({username: req.body.username}, function (err, user) {
                 if (err) {
                     return res.json({successful: false, message: "Error when getting user!"});
                 }

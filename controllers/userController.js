@@ -370,7 +370,7 @@ module.exports = {
                     }
                     data.users = users;
 
-                    return res.render('user/grantAccess', data);
+                    return res.render('user/grantAccessMyMailbox', data);
                 });
             }
         });
