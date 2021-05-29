@@ -1,5 +1,6 @@
 var UserModel = require('../models/userModel.js');
 var MailboxModel = require('../models/mailboxModel.js')
+var PackageAccessModel = require('../models/packageAccessModel.js')
 var bcrypt = require('bcrypt');
 
 /**
@@ -370,6 +371,16 @@ module.exports = {
                     }
                     data.users = users;
 
+                    PackageAccessModel.find({mailbox_id: id}).populate('user_id').exec(function (err, packageAccesses) {
+                        if (err) {
+                            return res.status(500).json({
+                                message: 'Error when getting package accesses.',
+                                error: err
+                            });
+                        }
+                        data.packageAccesses = packageAccesses;
+                        return res.render('user/grantAccessMyMailbox', data);
+                    });
                     return res.render('user/grantAccessMyMailbox', data);
                 });
             }
