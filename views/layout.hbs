@@ -32,13 +32,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/users/myMailboxes">Moji paketniki</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users/profile">Profil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users/logout">Odjava</a>
-                </li>
-
                 {{#if session.isAdmin}}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -48,7 +41,6 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="/mailbox/administration">Nabiralnik</a>
                             <a class="dropdown-item" href="/users/administration">Uporabniki</a>
-                            <a class="dropdown-item" href="#">Paketi</a>
                         </div>
                     </li>
                 {{/if}}
@@ -63,6 +55,18 @@
                     <a class="nav-link" href="/users/register">Registracija</a>
                 </li>
             {{/if}}
+        {{#if session.login}}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    {{session.username}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/users/profile">Profil</a>
+                    <a class="dropdown-item" href="/users/logout">Odjava</a>
+                </div>
+            </li>
+        {{/if}}
         </ul>
     </div>
 </nav>

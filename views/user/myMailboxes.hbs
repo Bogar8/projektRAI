@@ -1,14 +1,16 @@
-<h2>Moji nabiralniki:</h2>
-<hr>
-{{#each mailboxes}}
-    <a href="/users/myMailboxes/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
-    <a href="/packageAccess/accessHistory/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Zgodovina dostopov</a>
-    <a href="/users/grantAccess/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Dodaj dostop</a>
-    <p>Lastnik: {{owner_id.username}}<br>
-        Koda : {{code}} <br>
-        Lokacija: {{location}} <br>
-        Nazadnje odklenjen: {{last_accessed_date}} <br>
-        Zaklenjen: {{#if locked}}DA {{else}} NE{{/if}}</p>
-
+<div class="container">
+    <h2>Moji paketniki</h2>
     <hr>
-{{/each}}
+    {{#each mailboxes}}
+        <p>Lastnik: {{owner_id.username}}<br>
+            Koda : {{code}} <br>
+            Lokacija: {{location}} <br>
+            Nazadnje odklenjen: {{last_accessed_date}} <br>
+            Zaklenjen: {{#if locked}}DA {{else}} NE{{/if}}</p>
+
+        <a href="/users/myMailboxes/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
+        <a href="/packageAccess/accessHistory/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Zgodovina dostopov</a>
+        <a href="/users/grantAccess/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Dodaj dostop</a>
+        <hr>
+    {{/each}}
+</div>

@@ -1,8 +1,15 @@
-<h1>Spremeni podatke</h1>
-<form action="edit" method="post">
-    <input type="text" name="email" placeholder="E-mail" value="{{email}}">
-    <input type="password" name="password" placeholder="Geslo">
-    <div class="tp">
-        <input type="submit" value="Spremeni">
-    </div>
-</form>
+<div class="container">
+    <h2>Spremeni podatke</h2>
+
+    <form action="edit" method="post">
+          <div class="form-group" >
+            <label for="email">Email</label>
+            <input name="email" type="email" class="form-control" placeholder="Vnesite email" value="{{email}}">
+          </div>
+          <div class="form-group">
+            <label for="password">Geslo</label>
+            <input type="password" name="password" class="form-control" placeholder="Geslo">
+          </div>
+          <input type="submit" class="btn btn-primary" value="Spremeni">
+    </form>
+</div>

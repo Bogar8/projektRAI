@@ -1,19 +1,22 @@
-<form action="/mailbox/administration/edit/{{mailbox._id}}" method="post">
-    <label for="owner_id">Izberi lastnika: </label>
-    <select name="owner_id" id="owner_id">
-        {{#each users}}
-            <option value="{{_id}}" {{#if me}}selected{{/if}}>{{username}}</option>
-        {{/each}}
-    </select>
-    <br>
-    <br>
-    <label for="location">Lokacija paketnika</label>
-    <input type="text" name="location" placeholder="Lokacija" value="{{mailbox.location}}" required="">
-    <br>
-    <br>
-    <label for="code">Koda:</label>
-    <input type="text" name="code" placeholder="code" value="{{mailbox.code}}" required="">
-    <br>
-    <br>
-    <input class="btn btn-primary btn-md " type="submit" value="Uredi">
-</form>
+<div class="container">
+    <h2>Uredi paketnik</h2>
+    <form action="/mailbox/administration/edit/{{mailbox._id}}" method="post">
+      <div class="form-group" >
+        <label for="owner_id">Izberi lastnika</label>
+         <select name="owner_id" class="form-control" id="owner_id">
+            {{#each users}}
+                <option value="{{_id}}" {{#if me}}selected{{/if}}>{{username}}</option>
+            {{/each}}
+        </select>
+      </div>
+       <div class="form-group" >
+          <label for="location">Lokacija paketnika</label>
+           <input type="text" name="location" placeholder="Lokacija" class="form-control" value="{{mailbox.location}}" required="">
+        </div>
+       <div class="form-group" >
+          <label for="code">Koda</label>
+           <input type="text" name="code" placeholder="code" class="form-control" value="{{mailbox.code}}" required="">
+        </div>
+      <input type="submit" class="btn btn-primary" value="Uredi">
+    </form>
+</div>

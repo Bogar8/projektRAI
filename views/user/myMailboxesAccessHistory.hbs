@@ -1,9 +1,12 @@
-<h2>Zgodovina dostopov</h2>
-<hr>
-{{#each accesses}}
-    <p>
-        Dostopal : {{user_id.username}} <br>
-        Lokacija: {{mailbox_id.location}} <br>
-        Dostopan: {{date}}</p>
+<div class="container">
+    <h2>Zgodovina dostopov</h2>
     <hr>
-{{/each}}
+    {{#each accesses}}
+        <p>
+            Dostopal : {{user_id.username}} <br>
+            Lokacija: {{mailbox_id.location}} <br>
+            Dostopan: {{date}}</p>
+        <hr>
+    {{/each}}
+</div>
+

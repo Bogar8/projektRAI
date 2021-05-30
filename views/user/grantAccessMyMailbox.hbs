@@ -1,30 +1,39 @@
-<h2>Paketnik:</h2>
-<hr>
-<p>Lastnik: {{mailbox.owner_id.username}}<br>
-    Koda : {{mailbox.code}} <br>
-    Lokacija: {{mailbox.location}} <br>
-    Nazadnje odklenjen: {{mailbox.last_accessed_date}} <br>
-    Zaklenjen: {{#if mailbox.locked}}DA {{else}} NE{{/if}}</p>
-<h2>Dodaj dostop:</h2>
-<hr>
-<form action="/packageAccess/grantAccess" method="post">
-    <p>Od: <input type="date" id="date_from" name="date_from"></p>
-    <p>Do: <input type="date" id="date_to" name="date_to"></p>
-    <select name="username" id="username">
-        {{#each users}}
-            <option value="{{username}}" {{#if me}}selected{{/if}}>{{username}}</option>
-        {{/each}}
-    </select>
-    <input type="text" id="mailbox_id" name="mailbox_id" value="{{mailbox._id}}" hidden>
-    <input type="text" id="user_id" name="user_id" value="{{mailbox.owner_id}}" hidden>
-    <div class="tp">
-        <br>
-        <input type="submit" value="Dodaj dostop">
-    </div>
-</form>
-<hr>
-{{#each packageAccesses}}
-    <p>1</p>
-    <p>{{date_from}}</p>
-    <p>{{date_to}}</p>
-{{/each}}
+<div class="container">
+
+    <h2>Paketnik</h2>
+    <hr>
+    <p>Lastnik: {{mailbox.owner_id.username}}<br>
+        Koda : {{mailbox.code}} <br>
+        Lokacija: {{mailbox.location}} <br>
+        Nazadnje odklenjen: {{mailbox.last_accessed_date}} <br>
+        Zaklenjen: {{#if mailbox.locked}}DA {{else}} NE{{/if}}</p>
+</div>
+<div class="container">
+    <h2>Dodaj dostop</h2>
+    <hr>
+    <form action="/packageAccess/grantAccess" method="post">
+        <p>Od: <input type="date" id="date_from" name="date_from"></p>
+        <p>Do: <input type="date" id="date_to" name="date_to"></p>
+        <select name="username" id="username">
+            {{#each users}}
+                <option value="{{username}}" {{#if me}}selected{{/if}}>{{username}}</option>
+            {{/each}}
+        </select>
+        <input type="text" id="mailbox_id" name="mailbox_id" value="{{mailbox._id}}" hidden>
+        <input type="text" id="user_id" name="user_id" value="{{mailbox.owner_id}}" hidden>
+        <div class="tp">
+            <br>
+            <input type="submit" value="Dodaj dostop">
+        </div>
+    </form>
+    <hr>
+</div>
+<div class="container">
+    <h2>Veljavni dostopi</h2>
+    {{#each packageAccesses}}
+        <p>1</p>
+        <p>{{date_from}}</p>
+        <p>{{date_to}}</p>
+    {{/each}}
+
+</div>

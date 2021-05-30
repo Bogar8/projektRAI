@@ -5,8 +5,8 @@ body {
 .container{
   margin: 2%;
   padding: 2%;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 3% !important;
+  padding-right: 3% !important;
   background: ghostwhite;
   box-shadow: 0 1px 1px rgba(0,0,0,0.12),
   0 2px 2px rgba(0,0,0,0.12),
@@ -17,19 +17,20 @@ body {
   font-size: 1.5em;
 }
 
-.form{
-  margin: 2%;
-}
-
-.title{
-  margin-left: 2%;
-}
-
 .login_alert{
   font-size: 0.7em;
   margin: 2%;
   width: max-content;
   position: absolute;
+}
+
+.navbar{
+  padding-left: 7% !important;
+  padding-right: 7% !important;
+}
+
+.gray_text{
+  color: gray;
 }
 
 /*

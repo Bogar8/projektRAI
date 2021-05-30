@@ -1,38 +1,39 @@
-<h1>Dodaj nabiralnik</h1>
-<form action="/mailbox" method="post">
-    <label for="owner">Izberi lastnika: </label>
-    <select name="owner" id="owner">
-        {{#each users}}
-            <option value="{{_id}}">{{username}}</option>
-        {{/each}}
-    </select>
-    <br>
-    <br>
-    <label for="location">Lokacija paketnika</label>
-    <input type="text" name="location" placeholder="Lokacija" required="">
-    <br>
-    <br>
-    <label for="code">Koda:</label>
-    <input type="text" name="code" placeholder="code" required="">
-    <br>
-    <br>
-    <input class="btn btn-primary btn-md " type="submit" value="Dodaj">
-</form>
-<br>
-<br>
-<hr>
-<h2>Nabiralniki:</h2>
-<hr>
-{{#each mailboxes}}
-    <a href="/mailbox/administration/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
-    <form action="/mailbox/delete/{{_id}}" method="post">
-        <input class="btn btn-primary btn-md " type="submit" value="Izbriši">
-    </form>
-    <p>Lastnik: {{owner_id.username}}<br>
-        Koda: {{code}} <br>
-        Lokacija: {{location}} <br>
-        Nazadnje odklenjen: {{last_accessed}} <br>
-        Zaklenjen: {{#if locked}}DA {{else}} NE{{/if}}</p>
-
+<div class="container">
+    <h2>Dodaj nabiralnik</h2>
+    <form action="/mailbox" method="post">
+          <div class="form-group" >
+            <label for="owner">Izberi lastnika</label>
+          <select name="owner" class="form-control" id="owner">
+              {{#each users}}
+                  <option value="{{_id}}">{{username}}</option>
+              {{/each}}
+          </select>
+          </div>
+          <div class="form-group">
+              <label for="location">Lokacija paketnika</label>
+              <input type="text" name="location" class="form-control" placeholder="Lokacija" required="">
+          </div>
+          <div class="form-group">
+              <label for="code">Koda</label>
+              <input type="text" name="code" class="form-control" placeholder="Koda" required="">
+          </div>
+          <input type="submit" class="btn btn-primary" value="Dodaj">
+        </form>
+</div>
+<div class="container">
+    <h2>Nabiralniki</h2>
     <hr>
-{{/each}}
+    {{#each mailboxes}}
+        <p>Lastnik: {{owner_id.username}}<br>
+            Koda: {{code}} <br>
+            Lokacija: {{location}} <br>
+            Nazadnje odklenjen: {{last_accessed}} <br>
+            Zaklenjen: {{#if locked}}DA {{else}} NE{{/if}}</p>
+
+        <form action="/mailbox/delete/{{_id}}" method="post">
+            <input class="btn btn-primary btn-md " type="submit" value="Izbriši">
+            <a href="/mailbox/administration/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
+        </form>
+        <hr>
+    {{/each}}
+</div>

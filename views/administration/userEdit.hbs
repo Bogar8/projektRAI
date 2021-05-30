@@ -1,8 +1,22 @@
-<form action="/users/administration/edit/{{user._id}}" method="post">
-    <input type="text" name="email" placeholder="E-mail" required="" value="{{user.email}}">
-    <input type="text" name="username" placeholder="Username" required="" value="{{user.username}}">
-    <input type="password" name="password" placeholder="Password">
-    <input type="checkbox" {{#if user.isAdmin }} checked {{/if}} name="isAdmin">
-    <label for="isAdmin" > administrator</label>
-    <input type="submit" value="UPDATE USER">
-</form>
+<div class="container">
+    <h2>Uredi uporabnika</h2>
+    <form action="/users/administration/edit/{{user._id}}" method="post">
+         <div class="form-group" >
+                <label for="email">Email</label>
+                <input name="email" type="email" class="form-control" value="{{user.email}}" placeholder="Vnesite email">
+              </div>
+          <div class="form-group" >
+            <label for="username">Uporabniško ime</label>
+            <input name="username" type="text" class="form-control" value="{{user.username}}" placeholder="Vnesite uporabniško ime">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Geslo">
+          </div>
+           <div class="form-group">
+              <input type="checkbox" {{#if user.isAdmin }} checked {{/if}} name="isAdmin">
+              <label for="isAdmin" > administrator</label>
+           </div>
+          <input type="submit" class="btn btn-primary" value="Posodobi uporabnika">
+    </form>
+</div>

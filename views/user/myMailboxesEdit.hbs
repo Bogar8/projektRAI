@@ -1,7 +1,10 @@
-<form action="/users/myMailboxes/edit/{{mailbox._id}}" method="post">
-    <label for="location">Lokacija paketnika</label>
-    <input type="text" name="location" placeholder="Lokacija" value="{{mailbox.location}}" required="">
-    <br>
-    <br>
-    <input class="btn btn-primary btn-md " type="submit" value="Uredi">
-</form>
+<div class="container">
+    <form action="/users/myMailboxes/edit/{{mailbox._id}}" method="post">
+          <div class="form-group" >
+            <label for="location">Lokacija</label>
+            <input name="location" type="text" class="form-control" placeholder="Lokacija" value="{{mailbox.location}}" required="">
+          </div>
+          <input type="submit" class="btn btn-primary" value="Uredi">
+    </form>
+
+</div>
