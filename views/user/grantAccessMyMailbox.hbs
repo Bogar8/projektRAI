@@ -2,11 +2,11 @@
 
     <h2>Paketnik</h2>
     <hr>
-    <p>Lastnik: {{mailbox.owner_id.username}}<br>
-        Koda : {{mailbox.code}} <br>
-        Lokacija: {{mailbox.location}} <br>
-        Nazadnje odklenjen: {{mailbox.last_accessed_date}} <br>
-        Zaklenjen: {{#if mailbox.locked}}DA {{else}} NE{{/if}}</p>
+    <p> <span  class="gray_text">Lastnik: </span>{{mailbox.owner_id.username}}<br>
+        <span  class="gray_text">Koda : </span>{{mailbox.code}} <br>
+        <span  class="gray_text">Lokacija: </span>{{mailbox.location}} <br>
+        <span  class="gray_text">Nazadnje odklenjen: </span>{{mailbox.last_accessed_date}} <br>
+        <span  class="gray_text">Zaklenjen: </span>{{#if mailbox.locked}}DA {{else}} NE{{/if}}</p>
 </div>
 <div class="container">
     <h2>Dodaj dostop</h2>
@@ -36,9 +36,9 @@
 <div class="container">
     <h2>Veljavni dostopi</h2>
     {{#each packageAccesses}}
-        <p>Dostopen uporabniku: {{user_id.username}}</p>
-        <p>Dostopen od: {{date_from1}}</p>
-        <p>Dostopen do: {{date_to1}}</p>
+        <p><span  class="gray_text">Dostopen uporabniku: </span>{{user_id.username}}</p>
+        <p><span  class="gray_text">Dostopen od: </span>{{date_from1}}</p>
+        <p><span  class="gray_text">Dostopen do: </span>{{date_to1}}</p>
         <a href="/packageAccess/delete/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Odstrani dostop</a>
         <hr>
     {{/each}}

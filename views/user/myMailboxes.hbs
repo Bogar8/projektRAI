@@ -2,11 +2,11 @@
     <h2>Moji paketniki</h2>
     <hr>
     {{#each mailboxes}}
-        <p>Lastnik: {{owner_id.username}}<br>
-            Koda : {{code}} <br>
-            Lokacija: {{location}} <br>
-            Nazadnje odklenjen: {{last_accessed_date}} <br>
-            Zaklenjen: {{#if locked}}DA {{else}} NE{{/if}}</p>
+        <p> <span  class="gray_text">Lastnik: </span>{{owner_id.username}}<br>
+            <span  class="gray_text">Koda : </span>{{code}} <br>
+            <span  class="gray_text">Lokacija: </span>{{location}} <br>
+            <span  class="gray_text">Nazadnje odklenjen: </span>{{last_accessed_date}} <br>
+            <span  class="gray_text">Zaklenjen: </span>{{#if locked}}DA {{else}} NE{{/if}}</p>
 
         <a href="/users/myMailboxes/edit/{{_id}}" class="btn btn-primary btn-md " role="button" aria-pressed="true">Uredi</a>
         <a href="/packageAccess/accessHistory/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Zgodovina dostopov</a>

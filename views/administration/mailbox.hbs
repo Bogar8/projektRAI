@@ -24,11 +24,11 @@
     <h2>Nabiralniki</h2>
     <hr>
     {{#each mailboxes}}
-        <p>Lastnik: {{owner_id.username}}<br>
-            Koda: {{code}} <br>
-            Lokacija: {{location}} <br>
-            Nazadnje odklenjen: {{last_accessed}} <br>
-            Zaklenjen: {{#if locked}}DA {{else}} NE{{/if}}</p>
+        <p> <span  class="gray_text">Lastnik: </span>{{owner_id.username}}<br>
+            <span  class="gray_text">Koda: </span>{{code}} <br>
+            <span  class="gray_text">Lokacija: </span>{{location}} <br>
+            <span  class="gray_text">Nazadnje odklenjen: </span>{{last_accessed}} <br>
+            <span  class="gray_text">Zaklenjen: </span>{{#if locked}}DA {{else}} NE{{/if}}</p>
 
         <form action="/mailbox/delete/{{_id}}" method="post">
             <input class="btn btn-primary btn-md " type="submit" value="Izbriši">
