@@ -1,8 +1,18 @@
-<h1>Registracija</h1>
-<form action="/users" method="post">
-    <input type="text" name="email" placeholder="E-mail" required="">
-    <input type="text" name="username" placeholder="Username" required="">
-    <input type="password" name="password" placeholder="Password" required="">
-
-    <input type="submit" value="REGISTER">
-</form>
+<div class="container">
+    <h1 class="title">Registracija</h1>
+    <form class="form" action="/users" method="post">
+     <div class="form-group" >
+            <label for="exampleInputEmail1">Email</label>
+            <input name="email" type="email" class="form-control" placeholder="Vnesite email">
+          </div>
+      <div class="form-group" >
+        <label for="exampleInputEmail1">Uporabniško ime</label>
+        <input name="username" type="text" class="form-control" placeholder="Vnesite uporabniško ime">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Geslo">
+      </div>
+      <input type="submit" class="btn btn-primary" value="Prijava">
+    </form>
+</div>

@@ -11,4 +11,9 @@
       </div>
       <input type="submit" class="btn btn-primary" value="Prijava">
     </form>
+    {{#if napaka}}
+        <div class="login_alert alert alert-danger" role="alert">
+          Napačno uporabniško ime ali geslo
+        </div>
+    {{/if}}
 </div>
