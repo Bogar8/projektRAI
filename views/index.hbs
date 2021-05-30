@@ -1,6 +1,8 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<div class="container">
+    <h1>{{title}}</h1>
+    <p>Welcome to {{title}}</p>
+    {{#if session.login}}
+        <p>Pozdravljen {{session.username}}</p>
+    {{/if}}
 
-{{#if session.login}}
-    <p>Pozdravljen {{session.username}}</p>
-{{/if}}
+</div>
