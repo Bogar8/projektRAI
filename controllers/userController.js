@@ -303,7 +303,9 @@ module.exports = {
             if (error || !user) {
                 var err = new Error("Wrong username or password");
                 err.status = 401;
-                return next(err);
+                var data = []
+                data.napaka = true
+                return res.render('user/login', data);
             } else {
                 console.log(user);
                 req.session.userId = user._id;
