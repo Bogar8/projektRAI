@@ -376,7 +376,7 @@ module.exports = {
                     }
                     data.users = users;
 
-                    PackageAccessModel.find({mailbox_id: id}).populate('user_id').exec(function (err, packageAccesses) {
+                    PackageAccessModel.find({mailbox_id: id, date_accessed: null}).populate('user_id').exec(function (err, packageAccesses) {
                         if (err) {
                             return res.status(500).json({
                                 message: 'Error when getting package accesses.',
