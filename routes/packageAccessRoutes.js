@@ -18,6 +18,7 @@ function requiresLogin(req, res, next){
  */
 router.get('/', packageAccessController.list);
 router.get('/accessHistory/:id', requiresLogin, packageAccessController.accessHistoryList);
+router.get('/delete/:id', requiresLogin, packageAccessController.deleteAccess);
 
 /*
  * GET

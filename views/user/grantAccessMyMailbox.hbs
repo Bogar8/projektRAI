@@ -12,13 +12,18 @@
     <h2>Dodaj dostop</h2>
     <hr>
     <form action="/packageAccess/grantAccess" method="post">
-        <p>Od: <input type="date" id="date_from" name="date_from"></p>
-        <p>Do: <input type="date" id="date_to" name="date_to"></p>
-        <select name="username" id="username">
-            {{#each users}}
-                <option value="{{username}}" {{#if me}}selected{{/if}}>{{username}}</option>
-            {{/each}}
-        </select>
+        <div class="form-group" >
+            <label for="username">Za uporabnika (uporabniško ime): </label>
+            <input type="text" id="username" name="username" class="form-control">
+        </div>
+        <div class="form-group" >
+            <label for="date_from">Od: </label>
+            <input type="datetime-local" id="date_from" name="date_from" class="form-control">
+        </div>
+        <div class="form-group" >
+            <label for="date_to">Do: </label>
+            <input type="datetime-local" id="date_to" name="date_to" class="form-control">
+        </div>
         <input type="text" id="mailbox_id" name="mailbox_id" value="{{mailbox._id}}" hidden>
         <input type="text" id="user_id" name="user_id" value="{{mailbox.owner_id}}" hidden>
         <div class="tp">
@@ -31,9 +36,11 @@
 <div class="container">
     <h2>Veljavni dostopi</h2>
     {{#each packageAccesses}}
-        <p>1</p>
-        <p>{{date_from}}</p>
-        <p>{{date_to}}</p>
+        <p>Dostopen uporabniku: {{user_id.username}}</p>
+        <p>Dostopen od: {{date_from1}}</p>
+        <p>Dostopen do: {{date_to1}}</p>
+        <a href="/packageAccess/delete/{{_id}}"  class="btn btn-primary btn-md " role="button" aria-pressed="true">Odstrani dostop</a>
+        <hr>
     {{/each}}
 
 </div>

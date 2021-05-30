@@ -363,6 +363,9 @@ module.exports = {
                     });
                 }
                 data.mailbox = mailbox;
+                var date = new Date(data.mailbox.last_accessed);
+                data.mailbox.last_accessed_date = date.getHours() + ":" + date.getMinutes() + ", " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+
 
                 UserModel.find(function (err, users) {
                     if (err) {
@@ -381,9 +384,14 @@ module.exports = {
                             });
                         }
                         data.packageAccesses = packageAccesses;
+                        data.packageAccesses.forEach(element => {
+                            var date = new Date(element.date_from);
+                            element.date_from1 = date.getHours() + ":" + date.getMinutes() + ", " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+                            date = new Date(element.date_to);
+                            element.date_to1 = date.getHours() + ":" + date.getMinutes() + ", " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+                        });
                         return res.render('user/grantAccessMyMailbox', data);
                     });
-                    return res.render('user/grantAccessMyMailbox', data);
                 });
             }
         });

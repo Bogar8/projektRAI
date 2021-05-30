@@ -24,7 +24,7 @@ module.exports = {
         });
     },
     accessHistoryList: function (req, res) {
-        var data = []
+        var data = [];
         PackageaccessModel.find({mailbox_id : req.params.id, date_accessed: { $ne: null } }).populate("user_id").populate("mailbox_id").exec(function (err, accesses) {
             if (err) {
                 return res.status(500).json({
@@ -32,12 +32,25 @@ module.exports = {
                     error: err
                 });
             }
-            data.accesses = accesses
+            data.accesses = accesses;
             data.accesses.forEach(element => {
                 var date = new Date(element.date_accessed);
                 element.date = date.getHours() + ":" + date.getMinutes() + ", " + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
             });
             return res.render('user/myMailboxesAccessHistory', data);
+        });
+    },
+    deleteAccess: function (req, res) {
+        var id = req.params.id;
+        PackageaccessModel.findByIdAndRemove(id, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when deleting the access.',
+                    error: err
+                });
+            }
+
+            return res.redirect(req.get('referer'));
         });
     },
     /**
@@ -88,6 +101,7 @@ module.exports = {
     },
 
     grantAccess: function (req, res, next) {
+        var data = [];
         if (!req.body.username || !req.body.mailbox_id || !req.body.date_from || !req.body.date_to || !req.body.user_id)
             return res.json({successful: false, message: "Error not all data have been set!"});
 
@@ -100,11 +114,13 @@ module.exports = {
 
             UserModel.findOne({username: req.body.username}, function (err, user) {
                 if (err) {
-                    return res.json({successful: false, message: "Error when getting user!"});
+                    data.message = "Error when getting user!";
+                    return res.render('error', data);
                 }
 
                 if (!user) {
-                    return res.json({successful: false, message: "No such user!"});
+                    data.message = "No such user!";
+                    return res.render('error', data);
                 }
                 var packageAccess = new PackageaccessModel({
                     user_id: user._id,
@@ -116,9 +132,10 @@ module.exports = {
 
                 packageAccess.save(function (err, packageAccess) {
                     if (err) {
-                        return res.json({successful: false, message: "Error when creating packageAccess!"});
+                        data.message = "Error when saving.";
+                        return res.render('error', data);
                     }
-                    return res.json({successful: true, message: "Access successfully added!"});
+                    return res.redirect(req.get('referer'));
                 });
             });
         });
