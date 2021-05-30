@@ -427,7 +427,7 @@ module.exports = {
                 return res.json({successful: true, message: "User successfully added!"});
             });
         }
-    }, apiLogin: function (req, res, next) { //prijava
+    }, apiLogin: function (req, res) { //prijava
         if (!req.body.username || !req.body.password) {
             return res.json({successful: false, message: "Error not all data have been set!"});
         } else {

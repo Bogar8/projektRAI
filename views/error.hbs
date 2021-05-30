@@ -1,5 +1,7 @@
 <div class="container">
-    <h1>{{message}}</h1>
-    <h2>{{error.status}}</h2>
-    <pre>{{error.stack}}</pre>
+    <div class="login_alert alert alert-danger" role="alert">
+        <h1>{{message}} <br> Status: {{error.status}}</h1>
+    </div>
+    <a href="/">Pojdi domov</a>
+    {{!-- <pre>{{error.stack}}</pre> --}}
 </div>

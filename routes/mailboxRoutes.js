@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mailboxController = require('../controllers/mailboxController.js');
 var UserModel = require('../models/userModel.js');
+var MailboxModel = require('../models/mailboxModel.js');
 
 function getAllUsers(req, res, next) { //pridobi vse uporabnike za combobox za izbiro lastnika nabiralnika
     UserModel.find(function (err, users) {
@@ -26,6 +27,20 @@ function checkIfAdmin(req, res, next) { //preveri ali imamo pravice
     }
 }
 
+function checkSameCode(req, res, next) {
+    MailboxModel.findOne({code: req.body.code})
+        .exec(function (err, mailbox) {
+            if (err) {
+                return next(err);
+            } else if (!mailbox) {
+                return next()
+            }
+            var err = new Error("Mailbox with that code already exists");
+            err.status = 401;
+            return next(err);
+        });
+}
+
 /*
  * GET
  */
@@ -40,10 +55,10 @@ router.get('/:id', mailboxController.show);
 /*
  * POST
  */
-router.post('/', mailboxController.create);
+router.post('/', checkIfAdmin, checkSameCode, mailboxController.create);
 router.post('/delete/:id', checkIfAdmin, mailboxController.remove);
-router.post('/administration/edit/:id', checkIfAdmin, mailboxController.update);
-router.post('/api/myMailboxes',mailboxController.apiShowMyMailboxes);
+router.post('/administration/edit/:id', checkIfAdmin, checkSameCode, mailboxController.update);
+router.post('/api/myMailboxes', mailboxController.apiShowMyMailboxes);
 
 
 /*

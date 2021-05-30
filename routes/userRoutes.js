@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var userController = require('../controllers/userController.js');
 var mailboxController = require('../controllers/mailboxController.js');
+var UserModel = require('../models/userModel.js');
 
 function checkIfAdmin(req, res, next) { //preveri ali imamo pravice
     if (req.session.isAdmin === true)
@@ -13,15 +14,40 @@ function checkIfAdmin(req, res, next) { //preveri ali imamo pravice
     }
 }
 
-function requiresLogin(req, res, next){
-    if(req.session && req.session.userId) {
+function requiresLogin(req, res, next) {
+    if (req.session && req.session.userId) {
         return next();
-    }
-    else {
+    } else {
         var err = new Error("You must be logged in to view this page.");
         err.status = 401;
         return next(err);
     }
+}
+
+function checkSameName(req, res, next) {
+    UserModel.findOne({username: req.body.username})
+        .exec(function (err, user) {
+            if (err) {
+                return next(err);
+            } else if (!user) {
+                return next()
+            }
+            var err = new Error("User with that name already exists");
+            err.status = 401;
+            return next(err);
+        });
+}
+
+function checkSameNameApi(req, res, next) {
+    UserModel.findOne({username: req.body.username})
+        .exec(function (err, user) {
+            if (err) {
+                return res.json({successful: false, message: "Error when connecting to database!"});
+            } else if (!user) {
+                return next()
+            }
+            return res.json({successful: false, message: "User with that name exists!"});
+        });
 }
 
 /*
@@ -31,7 +57,7 @@ router.get('/', userController.list);
 router.get('/administration', checkIfAdmin, userController.list);
 router.get('/register', userController.showRegister);
 router.get('/login', userController.showLogin);
-router.get('/logout',userController.logout);
+router.get('/logout', userController.logout);
 router.get('/administration/edit/:id', checkIfAdmin, userController.userEdit);
 router.get('/profile', requiresLogin, userController.showProfile);
 router.get('/edit', requiresLogin, userController.showEdit);
@@ -47,14 +73,14 @@ router.post('/delete/:id', checkIfAdmin, userController.remove);
 /*
  * POST
  */
-router.post('/', userController.create);
-router.post('/administration/create', userController.createAdmin);
+router.post('/', checkSameName, userController.create);
+router.post('/administration/create', checkIfAdmin, checkSameName, userController.createAdmin);
 router.post('/login', userController.login);
-router.post('/administration/edit/:id', checkIfAdmin, userController.update);
+router.post('/administration/edit/:id', checkIfAdmin, checkSameName, userController.update);
 router.post('/edit', requiresLogin, userController.edit)
 router.post('/myMailboxes/edit/:id', requiresLogin, mailboxController.mailboxUserUpdate);
-router.post('/api/create',userController.apiRegisterUser);
-router.post('/api/login',userController.apiLogin);
+router.post('/api/create', checkSameNameApi, userController.apiRegisterUser);
+router.post('/api/login', userController.apiLogin);
 /*
  * PUT
  */
