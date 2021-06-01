@@ -204,7 +204,7 @@ module.exports = {
                     }
 
                     if (!packageAccess) {
-                        return res.json({successful: false, message: "No such package acces!"});
+                        return res.json({successful: false, message: "You dont have access to unlock mailbox!"});
                     }
 
                     packageAccess.date_accessed = new Date().toISOString();

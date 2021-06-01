@@ -144,9 +144,9 @@ module.exports = {
 
         PythonShell.run('python/znacilnica.py', options, function (err, results) {
             if (err)
-                return res.json({successful: false, message: "error!"});
+                return res.json({successful: false, message: "No face found"});
             if (String(results) === "error")
-                return res.json({successful: false, message: "error python!"});
+                return res.json({successful: false, message: "No face found"});
             var userFace = new UserfaceModel({
                 user_id: req.body.user_id,
                 data: String(results)
@@ -200,10 +200,10 @@ module.exports = {
             PythonShell.run('python/compare.py', options, function (err, results) {
                 if (err) {
                     console.log(err)
-                    return res.json({successful: false, message: "error!"});
+                    return res.json({successful: false, message: "No face found"});
                 }
                 if (String(results) === "error")
-                    return res.json({successful: false, message: "error!"});
+                    return res.json({successful: false, message: "No face found"});
                 if (String(results) === "No matching")
                     return res.json({successful: false, message: "No matching"});
 
