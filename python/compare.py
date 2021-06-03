@@ -1,6 +1,5 @@
 import sys
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 import base64
 from PIL import Image
@@ -180,7 +179,7 @@ def main():
             max=cv2.compareHist(hog, input, 0)
             index=i
 
-    if max > 0.6:
+    if max > 0.7:
         print(index)
     else:
         print("No matching")

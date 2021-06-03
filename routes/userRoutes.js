@@ -76,7 +76,7 @@ router.post('/delete/:id', checkIfAdmin, userController.remove);
 router.post('/', checkSameName, userController.create);
 router.post('/administration/create', checkIfAdmin, checkSameName, userController.createAdmin);
 router.post('/login', userController.login);
-router.post('/administration/edit/:id', checkIfAdmin, checkSameName, userController.update);
+router.post('/administration/edit/:id', checkIfAdmin, userController.update);
 router.post('/edit', requiresLogin, userController.edit)
 router.post('/myMailboxes/edit/:id', requiresLogin, mailboxController.mailboxUserUpdate);
 router.post('/api/create', checkSameNameApi, userController.apiRegisterUser);
