@@ -128,7 +128,7 @@ module.exports = {
         let path = "tmp/tmp.txt"
         let dir = './tmp';
 
-        if (!fs.existsSync(dir)){
+        if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir);
         }
 
@@ -153,13 +153,29 @@ module.exports = {
             });
             userFace.save(function (err, userFace) {
                 if (err) {
-                    console.log("123" + err)
                     return res.status(500).json({
                         message: 'Error when creating userFace',
                         error: err
                     });
                 }
-                console.log("shranjeno")
+
+                if (fs.existsSync(dir)) {
+                    const files = fs.readdirSync(dir)
+
+                    if (files.length > 0) {
+                        files.forEach(function (filename) {
+                            if (fs.statSync(dir + "/" + filename).isDirectory()) {
+                                removeDir(dir + "/" + filename)
+                            } else {
+                                fs.unlinkSync(dir + "/" + filename)
+                            }
+                        })
+                        fs.rmdirSync(dir)
+                    } else {
+                        fs.rmdirSync(dir)
+                    }
+                }
+
                 return res.json({successful: true, message: "Photo successfully added!"});
             });
         });
@@ -169,7 +185,7 @@ module.exports = {
         let paths = []
         let dir = './tmp';
 
-        if (!fs.existsSync(dir)){
+        if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir);
         }
         fs.writeFile(path, photo, function (err) {
@@ -207,9 +223,31 @@ module.exports = {
                 if (String(results) === "No matching")
                     return res.json({successful: false, message: "No matching"});
 
+                if (fs.existsSync(dir)) {
+                    const files = fs.readdirSync(dir)
 
+                    if (files.length > 0) {
+                        files.forEach(function (filename) {
+                            if (fs.statSync(dir + "/" + filename).isDirectory()) {
+                                removeDir(dir + "/" + filename)
+                            } else {
+                                fs.unlinkSync(dir + "/" + filename)
+                            }
+                        })
+                        fs.rmdirSync(dir)
+                    } else {
+                        fs.rmdirSync(dir)
+                    }
+                }
                 let user = userFaces[Number(results)].user_id
-                return res.json({successful: true, message: "Face recognized!", user_id: user._id, username:user.username, email:user.email, isAdmin: user.isAdmin});
+                return res.json({
+                    successful: true,
+                    message: "Face recognized!",
+                    user_id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    isAdmin: user.isAdmin
+                });
             });
         });
     },
