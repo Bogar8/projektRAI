@@ -1,11 +1,9 @@
 import sys
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 import base64
 from PIL import Image
 import io
-import json
 import math
 
 np.set_printoptions(threshold=sys.maxsize)
@@ -153,23 +151,23 @@ def getHOG(image):
             histogram_bloka = np.array([])
     return rezultat.astype(np.float32)
 
-def stringToImage(base64_string):
+def stringToImage(base64_string): #pretvori sliko iz base64
     imgdata = base64.b64decode(base64_string)
     return Image.open(io.BytesIO(imgdata))
 
 
-def toRGB(image):
+def toRGB(image): #spremeni sliko v rgb
     return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
 
 
 def main():
-    f = open(sys.argv[1])
+    f = open(sys.argv[1]) #prebere datoteko v kateri je base64 slika
     photo=f.read()
-    image2 = toRGB(stringToImage(photo))
-    hog = getHOG(image2)
-    print(hog.tostring().hex())
+    image = toRGB(stringToImage(photo)) #spremeni sliko iz base 64 in jo spremeni v rgb
+    hog = getHOG(image) #izracuna znacilnico
+    print(hog.tostring().hex()) #izpise znacilnico ki se nato shrani v bazo
 
 try:
     main()
-except:
+except: #če pride do napake izpisemo error (npr. ni obraza na sliki)
     print("error")

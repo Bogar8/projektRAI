@@ -4,8 +4,6 @@ import numpy as np
 import base64
 from PIL import Image
 import io
-import json
-import os
 import math
 
 np.set_printoptions(threshold=sys.maxsize)
@@ -91,12 +89,12 @@ def hog_procedure(i, j, smer_gradienta, amplituda_gradienta):
 
 
 def getHOG(image):
-    gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    haar_face_cascade = cv2.CascadeClassifier("python/haarcascade_frontalface_alt.xml")
-    faces = haar_face_cascade.detectMultiScale(gray_img)
-    for (x, y, w, h) in faces:
+    gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #sliko spremenimo v sivinsko
+    haar_face_cascade = cv2.CascadeClassifier("python/haarcascade_frontalface_alt.xml") #apliciramo filter ki zazna obraze
+    faces = haar_face_cascade.detectMultiScale(gray_img) #pridobimo obraze
+    for (x, y, w, h) in faces: #vzamemo vrvi obraz ter ga "obrežemo"
         image = gray_img[y:y + h, x:x + w]
-        image=cv2.resize(image, (100, 100))
+        image=cv2.resize(image, (100, 100)) #obraz skaliramo na 100x100 pixlov
         break
 
     (h, w) = image.shape
@@ -153,38 +151,38 @@ def getHOG(image):
             histogram_bloka = np.array([])
     return rezultat.astype(np.float32)
 
-def stringToImage(base64_string):
+def stringToImage(base64_string): #pridobimo sliko ki je zakodirana kot base64
     imgdata = base64.b64decode(base64_string)
     return Image.open(io.BytesIO(imgdata))
 
 
-def toRGB(image):
+def toRGB(image): #sliko pretvorimo v rgb
     return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
 
 
 def main():
-    f = open(sys.argv[1],"r")
+    f = open(sys.argv[1],"r") #preberemo datoteko v kateri je zakodirana slika
     photo=f.read()
-    image2 = toRGB(stringToImage(photo))
-    hog = getHOG(image2)
+    image = toRGB(stringToImage(photo)) #sliko odkodiramo in spremenimo v rgb
+    hog = getHOG(image) # pridobimo znacilnice obraza
     max=0
-    str=sys.argv[2]
+    str=sys.argv[2] #preberemo datoteke v katerih so shranjene znacilnice iz baze
     arr=str.split(',')
     index=-1
-    for i in np.arange(0,len(arr)):
+    for i in np.arange(0,len(arr)): #primerjamo izracunano znacilnico z vsako iz baze
         f2 = open(arr[i])
         a=f2.read()
-        input = np.frombuffer(bytes.fromhex(a), dtype=np.float32)
-        if cv2.compareHist(hog, input, 0)>max:
+        input = np.frombuffer(bytes.fromhex(a), dtype=np.float32) #znacinline pretvorimo iz hexdeimalne vrednosti v numpy array
+        if cv2.compareHist(hog, input, 0)>max: #shranimo vedno najvecje ujemanje
             max=cv2.compareHist(hog, input, 0)
             index=i
 
-    if max > 0.7:
-        print(index)
-    else:
+    if max > 0.7: #ujemanje mora biti vsaj 70% da je to prava oseba
+        print(index) #vrne index najboljsega ujemanja
+    else: #vrnemo če ni ujemanja
         print("No matching")
 
 try:
     main()
-except:
+except: #če pride do napake vrnemo error (npr. ni bilo nobenega obraza na sliki)
     print("error")
