@@ -41,39 +41,16 @@ def hog_procedure(i, j, smer_gradienta, amplituda_gradienta):
         for y in range(i + lower_edge_y, i + upper_edge_y):
             for x in range(j + lower_edge_x, j + upper_edge_x):
                 if (smer_gradienta[y, x] % 36 == 0 and smer_gradienta[y, x] != 360):
-                    histogram[smer_gradienta[y, x] % 36] += amplituda_gradienta[y, x]
+                    histogram[int(smer_gradienta[y, x] / 36)] += amplituda_gradienta[y, x]
                 else:
-                    if (smer_gradienta[y, x] > 0 and smer_gradienta[y, x] < 36):
-                        histogram[0] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 0) / 36))
-                        histogram[1] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 0) / 36)
-                    elif (smer_gradienta[y, x] > 36 and smer_gradienta[y, x] < 72):
-                        histogram[1] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 36) / 36))
-                        histogram[2] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 36) / 36)
-                    elif (smer_gradienta[y, x] > 72 and smer_gradienta[y, x] < 108):
-                        histogram[2] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 72) / 36))
-                        histogram[3] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 72) / 36)
-                    elif (smer_gradienta[y, x] > 108 and smer_gradienta[y, x] < 144):
-                        histogram[3] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 108) / 36))
-                        histogram[4] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 108) / 36)
-                    elif (smer_gradienta[y, x] > 144 and smer_gradienta[y, x] < 180):
-                        histogram[4] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 144) / 36))
-                        histogram[5] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 144) / 36)
-                    elif (smer_gradienta[y, x] > 180 and smer_gradienta[y, x] < 216):
-                        histogram[5] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 180) / 36))
-                        histogram[6] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 180) / 36)
-                    elif (smer_gradienta[y, x] > 216 and smer_gradienta[y, x] < 252):
-                        histogram[6] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 216) / 36))
-                        histogram[7] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 216) / 36)
-                    elif (smer_gradienta[y, x] > 252 and smer_gradienta[y, x] < 288):
-                        histogram[7] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 252) / 36))
-                        histogram[8] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 252) / 36)
-                    elif (smer_gradienta[y, x] > 288 and smer_gradienta[y, x] < 324):
-                        histogram[8] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 288) / 36))
-                        histogram[9] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 288) / 36)
-                    elif (smer_gradienta[y, x] > 324 and smer_gradienta[y, x] < 360):
-                        histogram[9] += amplituda_gradienta[y, x] * (1 - ((smer_gradienta[y, x] - 324) / 36))
-                        histogram[0] += amplituda_gradienta[y, x] * ((smer_gradienta[y, x] - 324) / 36)
-                        # dodamo histogram prve regije
+                    lower_box = math.floor(smer_gradienta[y,x]/36)
+                    upper_box = math.ceil(smer_gradienta[y,x]/36)
+                    lower_box_value = lower_box*36
+                    if(upper_box == 10):
+                        upper_box = 0
+                    histogram[lower_box] += amplituda_gradienta[y,x]*(1-((smer_gradienta[y,x]-lower_box_value)/36))
+                    histogram[upper_box] += amplituda_gradienta[y,x]*((smer_gradienta[y,x]-lower_box_value)/36)
+        # dodamo histogram prve regije
         histogram_bloka = np.concatenate((histogram, histogram_bloka))
         # ponastavimo histogram
         histogram[0:10] = 0
